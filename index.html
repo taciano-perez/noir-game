@@ -1,0 +1,42 @@
+<html>
+<head>
+	<link rel="icon" href="./img/bogart.ico">
+	<style>
+		@font-face { font-family: AdvancedPixel7; src: url('./fonts/advanced_pixel-7.ttf'); font-size: 4em; } 
+		.class { background-color: #704214; }
+		span {
+			font-family: AdvancedPixel7;
+			font-size: 3em;
+		}
+		</style>
+</head>
+<body style="background-color:#eec49b;">
+	<div id="start-screen">
+		<!-- start button -->
+		<button onClick="startGame()">Start Game</button>
+	</div>
+	<div id="main-screen" hidden="true">
+	<table>
+		<tr>
+			<!-- image area -->
+			<td valign="top" width="20%">
+				<img src="./img/city-skyline-rain.png" width="100%">
+			</td>
+
+			<!-- text area -->
+			<td valign="top" width="50%">
+				<div id="text"></div>
+			</td>
+
+			<!-- character area -->
+			<td valign="top"  width="20%"><img src="./img/bogart.png" width="50%">
+			</td>
+
+		</tr>
+	</table>
+</div>
+
+<script src="js/game.js"></script>
+
+</body>
+</html>
