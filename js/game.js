@@ -43,7 +43,7 @@ class Player {
 const cards = {
     start: {
         image: "city-skyline-rain.png",
-        story: [    "<b>Chapter I</b>",
+        story: ["<b>Chapter I</b>",
                     "p", 'Rains fall over Triste-le-Roy.', "God knows this shithole needs a wash. But the gale doesn't clean the streets.",
                     "p", 'On the contrary.',
                     "p", 'Sometimes it flushes the vermin out.',
@@ -175,7 +175,7 @@ function playAudio(sourceName, gain) {
 
     const source = audioCtx.createMediaElementSource(audio);
     source.connect(gainNode);
-    //audio.play();
+    audio.play();
 }
 
 function playMusic() {
