@@ -17,3 +17,5 @@ A text-oriented game in JavaScript.
 #### Fonts
 
 - https://www.1001freefonts.com/advanced-pixel-7.font
+- https://www.1001freefonts.com/homemade-apple.font
+- https://www.1001freefonts.com/moms-typewriter.font
