@@ -1,3 +1,4 @@
+// DOM elements
 const start_screen = document.getElementById("start-screen"); 
 const main_screen = document.getElementById("main-screen");
 const images_pane = document.getElementById("images"); 
@@ -9,6 +10,11 @@ const character_abilities = document.getElementById("character-abilities");
 const notebook_window = document.getElementById("notebook");
 const records_window = document.getElementById("records");
 const records_body = document.getElementById("records-body");
+const character_builder_window = document.getElementById("character-builder");
+const character_builder_abilities = document.getElementById("character-builder-abilities");
+
+// game constants
+const TOTAL_CHARACTER_POINTS = 40;
 
 class Game {
     constructor(player) {
@@ -32,11 +38,15 @@ class Player {
         this.suavity = 5;      // how convincing you are
         this.erudition = 5;     // book knowledge
         this.streetsmarts = 5;  // street knowledge
+        this.faith = 5;
 
         // traits
         // cautious -- bold
         // law-abiding -- criminal
         // 
+    }
+    remainingPoints() {
+        return TOTAL_CHARACTER_POINTS - (this.muscle + this.moxie + this.handEyeCoordination + this.suavity + this.erudition + this.streetsmarts + this.faith);
     }
 }
 
@@ -93,6 +103,7 @@ const cards = {
 var game = new Game(new Player());
 
 function startGame() {
+    hideCharacterBuilderWindow();
     character_name.innerHTML = game.player.firstname + " " + game.player.lastname;
     start_screen.hidden = true;
     main_screen.hidden = false;
@@ -100,8 +111,17 @@ function startGame() {
     displayCard(cards.start);
 }
 
+function showCharacterBuilderWindow() {
+    editCharacterAbilities(character_builder_abilities);
+    character_builder_window.hidden = false;
+}
+
+function hideCharacterBuilderWindow() {
+    character_builder_window.hidden = true;
+}
+
 function showCharacterWindow() {
-    displayCharacterAbilities();
+    displayCharacterAbilities(character_abilities);
     character_window.hidden = false;
 }
 
@@ -126,14 +146,27 @@ function hideRecordsWindow() {
     records_window.hidden = true;
 }
 
-function displayCharacterAbilities() {   
-    character_abilities.innerHTML = "";
-    character_abilities.innerHTML += "<tr><td><span data-title='Affects strength feats and hand to hand combat.'>Muscle               : </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.muscle + "</span></td></tr>";
-    character_abilities.innerHTML += "<tr><td><span data-title='How much abuse you can suffer before giving up the ghost. Also affects how well you hold your liquor.'>Moxie                : </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.moxie + "</span></td></tr>";
-    character_abilities.innerHTML += "<tr><td><span data-title='Influences shooting and blade skills, as well as lock picking and sleight of hand.'>Hand-eye coordination: </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.handEyeCoordination + "</span></td></tr>";
-    character_abilities.innerHTML += "<tr><td><span data-title='How good you are in talking people into giving you what you want.'>Suavity              : </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.suavity + "</span></td></tr>";
-    character_abilities.innerHTML += "<tr><td><span data-title='The kind of knowledge you only find in books.'>Erudition            : </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.erudition + "</span></td></tr>";
-    character_abilities.innerHTML += "<tr><td><span data-title='The kind of knowledge you cannot find in any book.'>Street smarts        : </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.streetsmarts + "</span></td></tr>";
+function editCharacterAbilities(pane) {   
+    pane.innerHTML = "";
+    pane.innerHTML += "<tr><td><span colspan=4 style='text-align: center;'> Points to distribute: " + game.player.remainingPoints() + "</span></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title='Affects strength feats and hand to hand combat.'>Muscle               : </span></td>&nbsp;&nbsp;&nbsp;<td><button class='game-button'>-</button> <span>" + game.player.muscle + "</span> <button class='game-button'>+</button></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title='How much abuse you can suffer before giving up the ghost. Also affects how well you hold your liquor.'>Moxie                : </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.moxie + "</span></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title='Influences shooting and blade skills, as well as lock picking and sleight of hand.'>Hand-eye coordination: </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.handEyeCoordination + "</span></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title='How good you are in talking people into giving you what you want.'>Suavity              : </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.suavity + "</span></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title='The kind of knowledge you only find in books.'>Erudition            : </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.erudition + "</span></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title='The kind of knowledge you cannot find in any book.'>Street smarts        : </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.streetsmarts + "</span></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title=\"How much you gamble in Pascal's Wager.\">Faith        : </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.faith + "</span></td></tr>";
+}
+
+function displayCharacterAbilities(pane) {   
+    pane.innerHTML = "";
+    pane.innerHTML += "<tr><td><span data-title='Affects strength feats and hand to hand combat.'>Muscle               : </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.muscle + "</span></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title='How much abuse you can suffer before giving up the ghost. Also affects how well you hold your liquor.'>Moxie                : </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.moxie + "</span></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title='Influences shooting and blade skills, as well as lock picking and sleight of hand.'>Hand-eye coordination: </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.handEyeCoordination + "</span></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title='How good you are in talking people into giving you what you want.'>Suavity              : </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.suavity + "</span></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title='The kind of knowledge you only find in books.'>Erudition            : </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.erudition + "</span></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title='The kind of knowledge you cannot find in any book.'>Street smarts        : </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.streetsmarts + "</span></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title=\"How much you gamble in Pascal's Wager.\">Faith        : </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.faith + "</span></td></tr>";
 }
 
 async function displayCard(card) {
@@ -198,7 +231,6 @@ async function displayStory(sentences) {
             var splitCommand = sentence.split(/\s/);
             playAudio(splitCommand[1], SOUND_GAIN_FULL);
         } else {
-            
             story_pane.innerHTML += sentenceOpaque(sentence, i);;
             await fadeIn("sentence" + i);
             game.record += sentenceRecord(sentence);
