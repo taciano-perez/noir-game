@@ -1,6 +1,6 @@
 // load game data
 var cards = {};
-fetch('./cards.json')
+fetch('./js/cards.json')
     .then((response) => response.json())
     .then((json) => cards = json);
 
