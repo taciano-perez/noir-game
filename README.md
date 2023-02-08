@@ -7,6 +7,14 @@ A text-oriented game in JavaScript.
 > http_server
 ```
 
+## Game design
+
+### Theme and prose
+
+- The game is inspired by hardboiled detective fiction, and follows the tropes of the genre.
+- Sentences are short and direct, and use present tense.
+- Slang is heavily used. See [reference1](https://www.miskatonic.org/slang.html) and [reference2](http://www.classiccrimefiction.com/hardboiled-slang.htm).
+
 ### Resources
 
 #### Audio clips
