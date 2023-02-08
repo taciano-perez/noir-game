@@ -122,6 +122,11 @@
                 "targetCard": "start_client_talks2",
                 "precondition": "state.start.question_how_you_found_me == false",
                 "postcondition": "state.start.question_how_you_found_me = true"
+            },
+            {
+                "displayText" : "Take the case.",
+                "targetCard": "start_client_talks5",
+                "precondition": "state.start.question_what_happened == true"
             }
          ]
     },
@@ -149,7 +154,8 @@
             },
             {
                 "displayText" : "Take the case.",
-                "targetCard": "start_client_talks5"
+                "targetCard": "start_client_talks5",
+                "precondition": "state.start.question_what_happened == true"
             }
      ]
     },
@@ -167,7 +173,7 @@
                     "targetCard": "start_client_talks1",
                     "precondition": "state.start.question_what_happened == false",
                     "postcondition": "state.start.question_what_happened = true"
-                    },
+                },
                 {
                     "displayText" : "Ask how she got my name.",
                     "targetCard": "start_client_talks2",
@@ -176,7 +182,8 @@
                 },
                 {
                     "displayText" : "Take the case.",
-                    "targetCard": "start_client_talks5"
+                    "targetCard": "start_client_talks5",
+                    "precondition": "state.start.question_what_happened == true"
                 }
     ]
     },
@@ -190,10 +197,17 @@
         ],
          "options": [
             {
+                "displayText" : "Ask her what happened.",
+                "targetCard": "start_client_talks1",
+                "precondition": "state.start.question_what_happened == false",
+                "postcondition": "state.start.question_what_happened = true"
+            },
+            {
                 "displayText" : "Take the case.",
-                "targetCard": "start_client_talks5"
+                "targetCard": "start_client_talks5",
+                "precondition": "state.start.question_what_happened == true"
             }
-         ]
+     ]
     },
     "start_client_talks5": {
         "name": "start_client_talks5",
