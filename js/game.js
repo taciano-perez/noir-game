@@ -1,3 +1,9 @@
+// load game data
+var cards = {};
+fetch('../data/cards.json')
+    .then((response) => response.json())
+    .then((json) => cards = json);
+
 // DOM elements
 const start_screen = document.getElementById("start-screen"); 
 const main_screen = document.getElementById("main-screen");
@@ -16,10 +22,20 @@ const character_builder_abilities = document.getElementById("character-builder-a
 // game constants
 const TOTAL_CHARACTER_POINTS = 40;
 
+// debug constants
+const DEBUG = false;
+
 class Game {
     constructor(player) {
         this.player = player;
         this.record = "";
+        this.state = {
+            start: {
+                "question_how_you_found_me" : false,
+                "question_call_police" : false,
+                "question_what_happened" : false
+            }
+        }
     }
 }
 
@@ -32,12 +48,12 @@ class Player {
         this.health = 100;
         this.money = 100;
         // attributes / abilities
-        this.muscle = 5;    // strength feats and hand to hand combat
-        this.moxie = 5;     // constitution
+        this.muscle = 5;                // strength feats and hand to hand combat
+        this.moxie = 5;                 // constitution
         this.handEyeCoordination = 5;   // shooting and knife skills, lock picking
-        this.suavity = 5;      // how convincing you are
-        this.erudition = 5;     // book knowledge
-        this.streetsmarts = 5;  // street knowledge
+        this.suavity = 5;               // how convincing you are
+        this.erudition = 5;             // book knowledge
+        this.streetsmarts = 5;          // street knowledge
         this.faith = 5;
 
         // traits
@@ -47,56 +63,6 @@ class Player {
     }
     remainingPoints() {
         return TOTAL_CHARACTER_POINTS - (this.muscle + this.moxie + this.handEyeCoordination + this.suavity + this.erudition + this.streetsmarts + this.faith);
-    }
-}
-
-const cards = {
-    start: {
-        image: "city-skyline-rain.png",
-        story: ["<b>Chapter I</b>",
-                    "p", 'Rains fall over Triste-le-Roy.', "God knows this shithole needs a wash. But the gale doesn't clean the streets.",
-                    "p", 'On the contrary.',
-                    "p", 'Sometimes it flushes the vermin out.',
-                    "p", "I'm happy to be off the streets. Still, I could use the money...",
-                    "p", "My office was damp and musty, but at least indoors I wouldn't catch lead poisoning.",
-                    "p", "My stomach rumbles.", "I light a cigarette, and watch the smoke dance towards the ceiling.",
-                    "p", "Then someone knocks on the door.", "play_sound: ./audio/door-knock.mp3"],
-        options: [
-            ["Open the door.", "start_client_enters"],
-            ["Ask who's there.", "start_who_is_there"],
-            ["Tell them to go away.", "start_let_me_in"],
-            ["Hide behind your desk and stay quiet.", "start_let_me_in"]
-        ]
-    },
-    start_who_is_there: {
-        image: "office-door-closed.png",
-        story: ["p", "I hear a muffled woman's voice. \"A client. Open the door, please.\""],
-        options: [
-            ["Open the door.", "start_client_enters"],
-            ["Tell her to go away.", "start_let_me_in"],
-        ]
-    },
-    start_let_me_in: {
-        image: "office-door-closed.png",
-        story: [
-            "p", "\"I know you're in there. What kind of detective won't receive a client? Besides...\" Her voice cracks.",
-            "p", "\"I need help.\""
-        ],
-         options: [
-            ["Open the door.", "start_client_enters"]
-         ]
-    },
-    start_client_enters: {
-        image: "client_enters.png",
-        story: [
-            "p", "I open the door, and in walks a dame.",
-            "p", "Without asking permission, she slides a chair and sits down. Her hose swishes as she crosses her legs.",
-            "p", "I sit across her.",
-            "p", "\"Detective, I need your help.\""
-        ],
-         options: [
-            ["Go on."]
-         ]
     }
 }
 
@@ -174,17 +140,32 @@ async function displayCard(card) {
     clearOptions();
     displayImage(card.image);
     await displayStory(card.story);
-    displayOptions(card.options);
+    displayOptions(card);
 }
 
 function clearOptions() {
     options_pane.innerHTML = "";
 }
 
-function displayOptions(options) {
+function chooseOption(option) {
+    if (option.postcondition !== undefined) {    // process postcondition, if present
+        if (option.precondition.startsWith('state.')) {
+            indirectEval("this.game." + option.postcondition);
+        }
+    }
+    displayCard(cards[option.targetCard]);
+}
+
+function displayOptions(card) {
     options_pane.innerHTML += "<span class='user-option-header'>What should I do?</span> <br>";
-    options.forEach((option, index) => {
-        options_pane.innerHTML += "<span onClick='displayCard(cards." + option[1] + ")' class=\"user-option\">&nbsp;&nbsp;" + option[0] + "</span> <br>"
+    card.options.forEach((option, index) => {
+        if (option.precondition !== undefined) {    // is there a precondition?
+            if (option.precondition.startsWith('state.')) {
+                const result = indirectEval("this.game." + option.precondition);
+                if (!result) return;  // if precondition is not satisfied, skip this option
+            }
+        }
+        options_pane.innerHTML += "<span onClick='chooseOption(cards." + card.name + ".options[" + index + "])' class=\"user-option\">&nbsp;&nbsp;" + option.displayText + "</span> <br>"
     });
 }
 
@@ -199,6 +180,8 @@ const SOUND_GAIN_MEDIUM = 0.5;
 const SOUND_GAIN_LOW = 0.1;
 
 function playAudio(sourceName, gain) {
+    if (DEBUG) return;  // skip audio in DEBUG mode
+
     const audioCtx = new AudioContext();
     const audio = new Audio(sourceName);
 
@@ -235,7 +218,7 @@ async function displayStory(sentences) {
             await fadeIn("sentence" + i);
             game.record += sentenceRecord(sentence);
         }
-        await sleep(1000);
+        if (!DEBUG) await sleep(1000);
     }
 }
 
@@ -251,20 +234,28 @@ function sentenceRecord(sentence) {
 
 function fadeIn(id) {
     var fade = document.getElementById(id);
-    var opacity = 0;
-    var intervalID = setInterval(function() {
-        if (opacity < 1) {
-            opacity = opacity + 0.1
-            fade.style.opacity = opacity;
-            //console.log(id + " opacity: " + fade.style.opacity); 
-        } else {
-            fade.style.opacity = 1;
-            //console.log(id + " opacity DONE: " + fade.style.opacity); 
-            clearInterval(intervalID);
-        }
-    }, 80);
+    if (!DEBUG) {
+        var opacity = 0;
+        var intervalID = setInterval(function() {
+            if (opacity < 1) {
+                opacity = opacity + 0.1
+                fade.style.opacity = opacity;
+                //console.log(id + " opacity: " + fade.style.opacity); 
+            } else {
+                fade.style.opacity = 1;
+                //console.log(id + " opacity DONE: " + fade.style.opacity); 
+                clearInterval(intervalID);
+            }
+        }, 80);
+    } else {    // DEBUG
+        fade.style.opacity = 1;
+    }
 }
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function indirectEval(obj) {
+    return eval?.(`"use strict";(${obj})`);
 }
