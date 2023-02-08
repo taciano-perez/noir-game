@@ -24,6 +24,6 @@ A text-oriented game in JavaScript.
 
 #### Fonts
 
-- https://www.1001freefonts.com/advanced-pixel-7.font
-- https://www.1001freefonts.com/homemade-apple.font
-- https://www.1001freefonts.com/moms-typewriter.font
+- Advanced Pixel 7: https://www.1001freefonts.com/advanced-pixel-7.font
+- Homemade Apple: https://www.1001freefonts.com/homemade-apple.font
+- Mom's Typewriter: https://www.1001freefonts.com/moms-typewriter.font
