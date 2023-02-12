@@ -90,7 +90,10 @@
                 "displayText" : "Tell her to go on.",
                 "targetCard": "start_client_talks1",
                 "precondition": "state.start.question_what_happened == false",
-                "postcondition": "state.start.question_what_happened = true"
+                "postconditions": [
+                    "state.start.question_what_happened = true",
+                    "inventory.push('letter-marcel')"
+                ]
             },
             {
                 "displayText" : "Ask how she got my name.",
@@ -105,10 +108,29 @@
         "image": "client-sitting.png",
         "story": [
             "p", "I tell her to go on.",
-            "p", "She takes a deep breath. \"It is my brother. He's missing.\"",
-            "p", "\"He lives abroad\", she continues, \"but he's in Triste-le-Roy for a conference of sorts. At least that's what he told.\"",
+            "p", "She takes a deep breath. \"It's my brother. He's missing.\"",
+            "p", "\"He lives abroad\", she continues, \"but he's in Triste-le-Roy for a conference of sorts. At least that's what he said.\"",
             "p", "\"Here, take his letter.\" She produces a crumpled piece of paper from her purse and pushes it across the desk. \"He said we were to meet at the City Park, where we used to play as kids.\"",
             "p", "\"That was meant to have happened three days ago. He never showed up.\""
+        ],
+         "options": [
+            {
+                "displayText" : "Read the letter.",
+                "targetCard": "start_client_letter1",
+                "precondition": "state.start.read_letter == false",
+                "postconditions": [
+                    "state.start.read_letter = true",
+                    "showObject('letter-marcel')"
+                ]
+            }
+        ]
+    },
+    "start_client_letter1" : {
+        "name": "start_client_letter1",
+        "image": "client-sitting.png",
+        "story": [
+            "p", "I read the letter. It seems to confirm her story.",
+            "p", "I slip it in my pocket. It may come handy later."
         ],
          "options": [
             {
@@ -128,7 +150,7 @@
                 "targetCard": "start_client_talks5",
                 "precondition": "state.start.question_what_happened == true"
             }
-         ]
+         ]        
     },
     "start_client_talks2": {
         "name": "start_client_talks2",
@@ -144,7 +166,10 @@
                 "displayText" : "Ask her what happened.",
                 "targetCard": "start_client_talks1",
                 "precondition": "state.start.question_what_happened == false",
-                "postcondition": "state.start.question_what_happened = true"
+                "postconditions": [
+                    "state.start.question_what_happened = true",
+                    "inventory.push('letter-marcel')"
+                ]
             },
             {
                 "displayText" : "Ask why not call the police.",
@@ -172,8 +197,11 @@
                     "displayText" : "Ask her what happened.",
                     "targetCard": "start_client_talks1",
                     "precondition": "state.start.question_what_happened == false",
-                    "postcondition": "state.start.question_what_happened = true"
-                },
+                    "postconditions": [
+                        "state.start.question_what_happened = true",
+                        "inventory.push('letter-marcel')"
+                    ]
+                    },
                 {
                     "displayText" : "Ask how she got my name.",
                     "targetCard": "start_client_talks2",
@@ -200,7 +228,10 @@
                 "displayText" : "Ask her what happened.",
                 "targetCard": "start_client_talks1",
                 "precondition": "state.start.question_what_happened == false",
-                "postcondition": "state.start.question_what_happened = true"
+                "postconditions": [
+                    "state.start.question_what_happened = true",
+                    "inventory.push('letter-marcel')"
+                ]
             },
             {
                 "displayText" : "Take the case.",

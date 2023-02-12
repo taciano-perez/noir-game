@@ -24,6 +24,7 @@ A text-oriented game in JavaScript.
 - The game is inspired by hardboiled detective fiction, and follows the tropes of the genre.
 - Sentences are short and direct, and use present tense.
 - Slang is heavily used. See [reference1](https://www.miskatonic.org/slang.html) and [reference2](http://www.classiccrimefiction.com/hardboiled-slang.htm).
+- Guns used in hardboiled fiction: (http://raymondchandlercrimeglossary.blogspot.com/p/the-guns-of-raymond-chandler.html)
 
 ### Resources
 
@@ -42,4 +43,7 @@ The following free art resources have been used in making the game. We thank the
 
 #### Images
 
-- The images were generated using DALL-E.
+- Most images were generated using DALL-E.
+- Some images were pixelated using (https://onlineimagetools.com/pixelate-image)
+
+The game and its assets are, unless otherwise indicated, copyright of Taciano Dreckmann Perez (C) 2023.

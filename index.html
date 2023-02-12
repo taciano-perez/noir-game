@@ -21,7 +21,7 @@
 			font-family: AdvancedPixel7;
 			background-color: #625950;
 			color: #fff;
-			font-size: 0.5em;
+			font-size: 1em;
 			position: absolute;
 			padding: 1px 5px 2px 5px;
 			bottom: -1.6em;
@@ -69,7 +69,6 @@
 		}
 		.popup {
 			width: 50%;
-			height: 80%;
 			background: #F8D5A7;
 			position: absolute;
 			top: 0;
@@ -106,8 +105,8 @@
 			<!-- start button showCharacterBuilderWindow -->
 			<button onClick="startGame();" class="game-button">New Game</button>
 			<br> &nbsp; <br>
-			<span>Version 0.1.1</span> <br>
-			<span>08 Feb 2023</span>
+			<span>Version 0.1.2</span> <br>
+			<span>12 Feb 2023</span>
 		</center>
 	</div>
 	<div id="main-screen" hidden="true">
@@ -133,6 +132,8 @@
 						&nbsp; <br>
 						<button onClick="showNotebookWindow();" class="game-button">Notebook</button> <br>
 						&nbsp; <br>
+						<button onClick="showInventoryWindow();" class="game-button">Inventory</button> <br>
+						&nbsp; <br>
 						<button onClick="showRecordsWindow();" class="game-button">Case File</button> <br>
 					</center>
 				</td>
@@ -149,7 +150,7 @@
 
 	<!-- pop-up windows-->
 	<div class="container-popup" id="character-builder" hidden="true">
-		<div class="popup">
+		<div class="popup" style="height: 80%;">
 			<center>
 				<b><span>New Character</span></b>
 				<br>
@@ -163,7 +164,7 @@
 		</div>
 	</div>
 	<div class="container-popup" id="character-stats" hidden="true">
-		<div class="popup">
+		<div class="popup" style="height: 80%;">
 			<center>
 				<b><span>Character Sheet</span></b>
 				<br>
@@ -175,7 +176,7 @@
 		</div>
 	</div>
 	<div class="container-popup" id="notebook" hidden="true">
-		<div class="popup" style="background: #ffffff url('./img/journal_page_bg.jpg'); padding: 10px;">
+		<div class="popup" style="background: #ffffff url('./img/journal_page_bg.jpg'); padding: 10px; height: 80%;">
 			<center>
 				<b><span class="journal">Notes</span></b>
 				&nbsp; <br>
@@ -188,7 +189,7 @@
 		</div>
 	</div>
 	<div class="container-popup" id="records" hidden="true">
-		<div class="popup" style="background: #ffffff url('./img/papertexture.jpg');  overflow-y: scroll; padding: 10px;">
+		<div class="popup" style="background: #ffffff url('./img/papertexture.jpg');  overflow-y: scroll; padding: 10px; height: 80%;">
 			<center>
 				<b><span class="typewriter">Case File</span></b>
 				&nbsp; <br>
@@ -197,6 +198,26 @@
 			<center>
 				&nbsp; <br>
 				<button onClick="hideRecordsWindow();" class="game-button">Close</button>
+			</center>
+		</div>
+	</div>
+	<div class="container-popup" id="inventory" hidden="true">
+		<div class="popup" style="background: #ffffff url('./img/suitcase.png'); padding: 10px; background-size: contain; background-repeat: no-repeat; aspect-ratio: 1217/883;">
+			<div align="right"><button onClick="hideInventoryWindow();" class="game-button"> X </button></div>
+			<div id="empty-space" width="100%" style="height: 20%;">&nbsp;</div>
+			<div>
+				<center>
+					<table width="80%" id="inventory-table">
+					</table>
+				</center>
+			</div>
+		</div>
+	</div>
+	<div class="container-popup" id="show-object" hidden="true" style="width: 40%; background-color: transparent; margin: auto;">
+		<div>
+			<div align="right"><button onClick="hideObject();" class="game-button"> X </button></div>
+			<center>
+				<img id="object-image" style="max-width: 100%"/>
 			</center>
 		</div>
 	</div>

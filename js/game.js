@@ -1,8 +1,13 @@
 // load game data
 var cards = {};
-fetch('./js/cards.json')
+fetch('./data/cards.json')
     .then((response) => response.json())
     .then((json) => cards = json);
+
+var objects = {};
+fetch('./data/objects.json')
+    .then((response) => response.json())
+    .then((json) => objects = json);    
 
 // DOM elements
 const start_screen = document.getElementById("start-screen"); 
@@ -18,6 +23,10 @@ const records_window = document.getElementById("records");
 const records_body = document.getElementById("records-body");
 const character_builder_window = document.getElementById("character-builder");
 const character_builder_abilities = document.getElementById("character-builder-abilities");
+const inventory_window = document.getElementById("inventory");
+const inventory_table = document.getElementById("inventory-table");
+const object_window = document.getElementById("show-object");
+const object_image = document.getElementById("object-image");
 
 // game constants
 const TOTAL_CHARACTER_POINTS = 40;
@@ -29,11 +38,13 @@ class Game {
     constructor(player) {
         this.player = player;
         this.record = "";
+        this.inventory = [ "bankers-special"];
         this.state = {
             start: {
                 "question_how_you_found_me" : false,
                 "question_call_police" : false,
-                "question_what_happened" : false
+                "question_what_happened" : false,
+                "read_letter" : false
             }
         }
     }
@@ -95,6 +106,53 @@ function hideCharacterWindow() {
     character_window.hidden = true;
 }
 
+function renderInventoryObject(index) {
+    var object_name = game.inventory[index];
+    var object = objects[object_name];
+    if (typeof object == 'undefined') {
+        return '<td width="10%" align="center"> <img src="./img/empty-image.png" width="80%" height="100%"/> </td>';
+    } else {
+        return '<td width="10%" align="center"> <div data-title="' + object.description + '"> <img src="./img/'+ object.thumbnail + '" width="80%" height="100%" onClick="showObject(\'' + object_name + '\')"/> </div> </td> ';
+    }
+}
+
+function showInventoryWindow() {
+    var table_body = "";
+    // render upper row
+    table_body += '<tr>';
+    for (i=0; i<5; i++) {
+        table_body += renderInventoryObject(i);
+    }
+    table_body += '</tr>';
+    // render bottom row
+    table_body += '<tr>';
+    for (i=5; i<10; i++) {
+        table_body += renderInventoryObject(i);
+    }
+    table_body += '</tr>';
+    inventory_table.innerHTML = table_body;
+
+    inventory_window.hidden = false;
+}
+
+function hideInventoryWindow() {
+    inventory_window.hidden = true;
+}
+
+function showObject(obj_name) {
+    var obj = objects[obj_name];
+    object_image.src = "./img/" + obj.image;
+    object_window.hidden = false;
+}
+
+function hideObject() {
+    object_window.hidden = true;
+}
+
+function hideCharacterWindow() {
+    inventory_window.hidden = true;
+}
+
 function showNotebookWindow() {
     notebook_window.hidden = false;
 }
@@ -147,11 +205,20 @@ function clearOptions() {
     options_pane.innerHTML = "";
 }
 
+function processPostcondition(postcondition) {
+    if (postcondition.startsWith('state.') || postcondition.startsWith('inventory.')) {
+        indirectEval("this.game." + postcondition);
+    } else {
+        indirectEval(postcondition);
+    }
+}
+
 function chooseOption(option) {
     if (option.postcondition !== undefined) {    // process postcondition, if present
-        if (option.precondition.startsWith('state.')) {
-            indirectEval("this.game." + option.postcondition);
-        }
+        processPostcondition(option.postcondition);
+    }
+    if (option.postconditions !== undefined) {    // process postconditions, if present
+        option.postconditions.forEach((postcondition) => processPostcondition(postcondition));
     }
     displayCard(cards[option.targetCard]);
 }

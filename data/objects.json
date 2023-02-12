@@ -1,0 +1,12 @@
+{
+    "bankers-special": {
+        "description" : "my trusty .38",
+        "image" : "bankers-special.png",
+        "thumbnail": "bankers-special.png"
+    },
+    "letter-marcel": {
+        "description" : "a crumpled letter",
+        "image" : "letter-marcel.png",
+        "thumbnail": "letter-marcel-thumb.png"
+    }
+}
