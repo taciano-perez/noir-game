@@ -110,9 +110,9 @@ function renderInventoryObject(index) {
     var object_name = game.inventory[index];
     var object = objects[object_name];
     if (typeof object == 'undefined') {
-        return '<td width="10%" align="center"> <img src="./img/empty-image.png" width="80%" height="100%"/> </td>';
+        return '<td width="10%" align="center"> <img src="./img/empty-image.png" width="80%" /> </td>';
     } else {
-        return '<td width="10%" align="center"> <div data-title="' + object.description + '"> <img src="./img/'+ object.thumbnail + '" width="80%" height="100%" onClick="showObject(\'' + object_name + '\')"/> </div> </td> ';
+        return '<td width="10%" align="center"> <div data-title="' + object.description + '"> <img src="./img/'+ object.thumbnail + '" width="80%" onClick="showObject(\'' + object_name + '\')"/> </div> </td> ';
     }
 }
 
