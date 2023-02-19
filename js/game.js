@@ -68,7 +68,8 @@ class Player {
         this.faith = 5;
 
         // traits
-        // cautious -- bold
+        this.cautious = 5;
+        this.bold = 5;
         // law-abiding -- criminal
         // 
     }
@@ -206,7 +207,7 @@ function clearOptions() {
 }
 
 function processPostcondition(postcondition) {
-    if (postcondition.startsWith('state.') || postcondition.startsWith('inventory.')) {
+    if (postcondition.startsWith('state.') || postcondition.startsWith('inventory.') || postcondition.startsWith('player.')) {
         indirectEval("this.game." + postcondition);
     } else {
         indirectEval(postcondition);
@@ -227,7 +228,7 @@ function displayOptions(card) {
     options_pane.innerHTML += "<span class='user-option-header'>What should I do?</span> <br>";
     card.options.forEach((option, index) => {
         if (option.precondition !== undefined) {    // is there a precondition?
-            if (option.precondition.startsWith('state.')) {
+            if (option.precondition.startsWith('state.') || option.precondition.startsWith('player.')) {
                 const result = indirectEval("this.game." + option.precondition);
                 if (!result) return;  // if precondition is not satisfied, skip this option
             }
@@ -238,9 +239,15 @@ function displayOptions(card) {
 
 function displayImage(name) {
     if (name !== null && name !== undefined) {
-        images_pane.innerHTML = "<img width=100% src='./img/" + name + "'/>"
+        images_pane.innerHTML = "<img class='image1' width=100% src='./img/" + name + "'/>"
     }
 };
+
+function overlayImage(name) {
+    if (name !== null && name !== undefined) {
+        images_pane.innerHTML += "<img class='image2' width=100% src='./img/" + name + "'/>"
+    }
+}
 
 const SOUND_GAIN_FULL = 1.0;
 const SOUND_GAIN_MEDIUM = 0.5;
@@ -280,6 +287,12 @@ async function displayStory(sentences) {
         } else if (sentence.startsWith("play_sound: ")) {
             var splitCommand = sentence.split(/\s/);
             playAudio(splitCommand[1], SOUND_GAIN_FULL);
+        } else if (sentence.startsWith("display_image: ")) {
+            var splitCommand = sentence.split(/\s/);
+            displayImage(splitCommand[1]);
+        } else if (sentence.startsWith("overlay_image: ")) {
+            var splitCommand = sentence.split(/\s/);
+            overlayImage(splitCommand[1]);
         } else {
             story_pane.innerHTML += sentenceOpaque(sentence, i);;
             await fadeIn("sentence" + i);

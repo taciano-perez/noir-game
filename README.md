@@ -30,7 +30,7 @@ A text-oriented game in JavaScript.
 
 I will not detail the story in order to prevent spoilers. The below list helps me keep track of the major parts that need to be done.
 
-- [ ] Chapter 1: A mysterious client
+- [ ] Chapter 1: The job
 - [ ] Chapter 2: City Park
 - [ ] Chapter 3: The 3rd Talmudian Conference
 - [ ] Chapter 4: The Blind Dutchman
@@ -44,6 +44,11 @@ The following free art resources have been used in making the game. We thank the
 
 - Rain sound - https://freesound.org/people/EduFigueres/sounds/539332/
 - Door knock - https://freesound.org/people/SubwaySandwitch420/sounds/540770/
+- Heels - https://freesound.org/people/pollyschambers/sounds/428982/
+- Footsteps on wood - https://freesound.org/people/Fewes/sounds/234263/
+- Single shot - https://freesound.org/people/johnyridgeback/sounds/567272/
+- Punch Argh! - https://freesound.org/people/CastIronCarousel/sounds/216781/
+- Male Death - https://freesound.org/people/HighPixel/sounds/554443/
 
 #### Fonts
 

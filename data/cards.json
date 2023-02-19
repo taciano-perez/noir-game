@@ -2,7 +2,7 @@
     "start": {
         "name": "start",
         "image": "city-skyline-rain.png",
-        "story": ["<b>Chapter I</b>",
+        "story": ["<b>Chapter I: The Job</b>",
                     "p", "Rains fall over Triste-le-Roy.", "God knows this shithole needs a wash. But the gale doesn't clean the streets.",
                     "p", "On the contrary.",
                     "p", "Sometimes it flushes the vermin out.",
@@ -32,7 +32,7 @@
     "start_who_is_there": {
         "name": "start_who_is_there",
         "image": "office-door-closed.png",
-        "story": [ "p", "\"Who's out there?\" I yell.",
+        "story": [ "\"Who's out there?\" I yell.",
                  "p", "I hear a muffled woman's voice. \"A client. Open the door, please.\""],
         "options": [
             {
@@ -49,7 +49,7 @@
         "name": "start_let_me_in1",
         "image": "office-door-closed.png",
         "story": [
-            "p", "I stand very still and don't say a word.",
+            "I stand very still and don't say a word.",
             "p", "A woman's voice comes from the other side of the door. \"I know you're in there. What kind of detective won't receive a client? Besides...\"",
             "p", "Her voice cracks. \"I need help. Please.\""
         ],
@@ -64,7 +64,7 @@
         "name": "start_let_me_in2",
         "image": "office-door-closed.png",
         "story": [
-            "p", "\"I'm busy,\" I grumble. \"Go take a powder.\"",
+            "\"I'm busy,\" I grumble. \"Go take a powder.\"",
             "p", "By the voice, there's definitely a woman on the other side.",
             "p", "\"What kind of detective won't receive a client? Besides...\" Her voice cracks.",
             "p", "\"I need help.\""
@@ -80,7 +80,7 @@
         "name": "start_client_enters",
         "image": "client_enters.png",
         "story": [
-            "p", "I open the door, and in walks a dame.",
+            "I open the door, and in walks a dame.",
             "p", "Without asking permission, she slides a chair and sits down. Her hose swishes as she crosses her legs.",
             "p", "I sit across her.",
             "p", "\"Detective, I need your help.\""
@@ -107,7 +107,7 @@
         "name": "start_client_talks1",
         "image": "client-sitting.png",
         "story": [
-            "p", "I tell her to go on.",
+            "I tell her to go on.",
             "p", "She takes a deep breath. \"It's my brother. He's missing.\"",
             "p", "\"He lives abroad\", she continues, \"but he's in Triste-le-Roy for a conference of sorts. At least that's what he said.\"",
             "p", "\"Here, take his letter.\" She produces a crumpled piece of paper from her purse and pushes it across the desk. \"He said we were to meet at the City Park, where we used to play as kids.\"",
@@ -129,7 +129,7 @@
         "name": "start_client_letter1",
         "image": "client-sitting.png",
         "story": [
-            "p", "I read the letter. It seems to confirm her story.",
+            "I read the letter. It seems to confirm her story.",
             "p", "I slip it in my pocket. It may come handy later."
         ],
          "options": [
@@ -156,8 +156,8 @@
         "name": "start_client_talks2",
         "image": "client-sitting.png",
         "story": [
-            "p", "I ask her, \"How did you find me? I'm not exactly famous.\" That was an understatement.",
-            "p", "\"I asked around\", she says, \"I know people who know people. I needed someone competent, but discreet.\"",
+            "I ask her, \"How did you find me? I'm not exactly famous.\" That was an understatement.",
+            "\"I asked around\", she says, \"I know people who know people. I needed someone competent, but discreet.\"",
             "p", "A faint smile curves the corners of her lips. \"And affordable.\"",
             "p", "\"But moreover, someone who won't involve the authorities.\""
         ],
@@ -188,7 +188,7 @@
         "name": "start_client_talks3",
         "image": "client-sitting.png",
         "story": [
-            "p", "\"Have you tried the buttons, honey?\" I blurt out. \"Old hammer and saws.\"",
+            "\"Have you tried the buttons, honey?\" I blurt out. \"Old hammer and saws.\"",
             "p", "She reclines on her seat with an impish smile. \"I dabble in certain... activities that aren't entirely approved by the cops. I won't say more.\"",
             "p", "\"But still, I deserve justice.\" Her gaze is fierce. \"And I will have it, one way or another."
         ],
@@ -219,7 +219,7 @@
         "name": "start_client_talks4",
         "image": "client-sitting.png",
         "story": [
-            "p", "\"Why not call the buttons, honey?\" I blurt out. \"Old hammer and saws. They're mostly daft, but you need no Sherlock.\"",
+            "\"Why not call the buttons, honey?\" I blurt out. \"Old hammer and saws. They're mostly daft, but you need no Sherlock.\"",
             "p", "She reclines in her seat with an impish grin. \"Let's say I dabble in certain... activities that aren't entirely approved by the cops. I won't say more.\"",
             "p", "\"But still, I deserve justice.\" Her gaze is fierce. \"And I will have it, one way or another."
         ],
@@ -244,14 +244,147 @@
         "name": "start_client_talks5",
         "image": "client-sitting.png",
         "story": [
-            "p", "I rise and walk up to the window, taking a final puff at my cigarette.",
-            "p", "\"I may be able to help you, babe. Since you seem to know so much, do you know my fee?\""
+            "I rise and walk up to the window, taking a final puff at my cigarette.",
+            "p", "\"I may be able to help you, babe. Since you seem to know so much, do you know my fee?\"",
+            "p", "\"Word on the street is that you'll do anything for twenty-five bucks a day,\" she said."
         ],
          "options": [
             {
-                "displayText" : "Go on.",
-                "targetCard": "start_client_talks5"
+                "displayText" : "Ask for more money.",
+                "targetCard": "start_client_talks6"
+            },
+            {
+                "displayText" : "Accept it.",
+                "targetCard": "start_client_talks7"
+            }
+
+         ]
+    },
+    "start_client_talks6": {
+        "name": "start_client_talks6",
+        "image": "client-sitting.png",
+        "story": [
+            "She wasn't wrong, but by her looks she's got cabbage. I decide to milk her.",
+            "\"A double sawbuck and change isn't worth the jam, honey. Nowadays it's fifty dollars a day plus expenses, or I walk out.\"",
+            "p", "\"That's ridiculous,\" she sneers, gazing around the poor state of my office. \"What do you think this is, Pinkerton? Here's ninety, an advance worth three days.\"",
+            "p", "She extracts the wrinkled notes from her purse and puts them on my desk, \"And count yourself lucky.\""
+        ],
+         "options": [
+            {
+                "displayText" : "Accept it.",
+                "targetCard": "start_client_talks7"
+            }
+
+         ]
+    },
+    "start_client_talks7": {
+        "name": "start_client_talks7",
+        "image": "client-sitting.png",
+        "story": [
+            "\"Okay, I'll take it.\" God knows I need the dough.",
+            "p", "She nods and asks, \"Your first move, what will it be?\"",
+            "p", "\"City Park, you said, huh? I guess I'll start there. Our only lead, anyway.\" We both stand up. I ask her, \"How do I get in touch with you? Phone number? Address?.\"",
+            "p", "\"Oh, don't bother. I'll be back in three days time,\" she turns around and leaves before I could reply. The door closes and I hear her footsteps down the hall.",
+            "display_image: office-door-closed.png", "play_sound: ./audio/heels.wav",
+            "p", "So now I had a job. Time to put this show on the road. Better get my boiler ready."
+        ],
+         "options": [
+            {
+                "displayText" : "Leave the office.",
+                "targetCard": "start_go_downstairs"
+            }
+
+         ]
+    },
+    "start_go_downstairs": {
+        "name": "start_go_downstairs",
+        "image": "office-hallway.png",
+        "story": [
+            "I lock the door and walk down the hallway.",
+            "p", "Suddenly I hear footsteps. That's uncommon, the building is pretty much empty at this time of the day.",
+            "play_sound: ./audio/footsteps-wood.ogg",
+            "p", "I hole up in a corner, back against a door, and see a dropper sneaking down the hall, packing iron.",
+            "overlay_image: thug1.png"
+        ],
+         "options": [
+            {
+                "displayText" : "Hide.",
+                "targetCard": "start_hide_thug1",
+                "precondition": "player.cautious >= 5"
+            },
+            {
+                "displayText" : "Punch him.",
+                "targetCard": "start_punch_thug1",
+                "precondition": "player.bold >= 5"
+            },
+            {
+                "displayText" : "Shoot him.",
+                "targetCard": "start_shoot_thug1",
+                "precondition": "player.bold >= 5"
             }
          ]
+    },
+    "start_hide_thug1": {
+        "name": "start_hide_thug1",
+        "image": "office-hallway.png",
+        "story": [
+            "I keep very still in the corner. The hatchetman goes down the hallway without noticing me. I wait until his footsteps have dwindled down before leaving my hideout.",
+            "play_sound: ./audio/footsteps-wood.ogg"
+        ],
+        "options": [
+           {
+               "displayText" : "Go to the garage.",
+               "targetCard": "start_car"
+           }
+        ]
+    },
+    "start_punch_thug1": {
+        "name": "start_punch_thug1",
+        "image": "office-hallway.png",
+        "story": [
+            "I keep very still in the corner, listening to the approaching steps.",
+            "play_sound: ./audio/footsteps-wood.ogg",
+            "p", " As the hatchetman approaches, I sucker punch him.",
+            "play_sound: ./audio/punch-argh.wav",
+            "play_sound: ./audio/male-death.mp3",
+            "p", "The chin music is too lively for the goon, who kisses the floor."
+        ],
+        "options": [
+           {
+               "displayText" : "Go to the garage.",
+               "targetCard": "start_car"
+           }
+        ]
+    },
+    "start_shoot_thug1": {
+        "name": "start_shoot_thug1",
+        "image": "office-hallway.png",
+        "story": [
+            "I keep very still in the corner, listening to the approaching steps.",
+            "play_sound: ./audio/footsteps-wood.ogg",
+            "p", " As the hatchetman approaches, I draw my heater and burn powder.",
+            "play_sound: ./audio/single-shot.wav",
+            "p", "He gets clipped in the face, and drops like a sack of potatoes. I drag him to an empty office, and fade from the scene."
+        ],
+        "options": [
+           {
+               "displayText" : "Go to the garage.",
+               "targetCard": "start_car"
+           }
+        ]
+    },
+    "start_car": {
+        "name": "start_car",
+        "image": "car.png",
+        "story": [
+            "I run downstairs to the garage, where my boiler is waiting."
+        ],
+        "options": [
+           {
+               "displayText" : "Go on.",
+               "targetCard": "start_car"
+           }
+        ]
     }
+
 }

@@ -94,6 +94,21 @@
 			font-family: MomsTypewriter;
 			font-size: 4em;
 		}
+		.image-parent {
+			position: relative;
+			top: 0;
+			left: 0;
+		}
+		.image1 {
+			position: relative;
+			top: 0;
+			left: 0;
+		}
+		.image2 {
+			position: absolute;
+			top: 0px;
+			left: 0px;
+		}		
 	</style>
 </head>
 <body style="background-color:#eec49b;">
@@ -105,8 +120,8 @@
 			<!-- start button showCharacterBuilderWindow -->
 			<button onClick="startGame();" class="game-button">New Game</button>
 			<br> &nbsp; <br>
-			<span>Version 0.1.3</span> <br>
-			<span>17 Feb 2023</span>
+			<span>Version 0.1.4</span> <br>
+			<span>19 Feb 2023</span>
 		</center>
 	</div>
 	<div id="main-screen" hidden="true">
@@ -114,7 +129,7 @@
 			<tr>
 				<!-- image area -->
 				<td valign="top" width="20%" rowspan="2">
-					<div id="images"></div>
+					<div id="images" class="image-parent"></div>
 				</td>
 
 				<!-- story area -->
