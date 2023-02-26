@@ -283,7 +283,7 @@
         "story": [
             "\"Okay, I'll take it.\" God knows I need the dough.",
             "p", "She nods and asks, \"Your first move, what will it be?\"",
-            "p", "\"City Park, you said, huh? I guess I'll start there. Our only lead, anyway.\" We both stand up. I ask her, \"How do I get in touch with you? Phone number? Address?.\"",
+            "p", "\"City Park, you said, huh? I guess I'll start there. Our only lead, anyway.\" We both stand up. I ask her, \"How do I get in touch with you? Phone number? Address?\"",
             "p", "\"Oh, don't bother. I'll be back in three days time,\" she turns around and leaves before I could reply. The door closes and I hear her footsteps down the hall.",
             "display_image: office-door-closed.png", "play_sound: ./audio/heels.wav",
             "p", "So now I had a job. Time to put this show on the road. Better get my boiler ready."
@@ -291,7 +291,8 @@
          "options": [
             {
                 "displayText" : "Leave the office.",
-                "targetCard": "start_go_downstairs"
+                "targetCard": "start_go_downstairs",
+                "postcondition": "currentEnemy = new Enemy({name: 'Goon', hitpoints: 50, attackNumDice: 2, attackCap: 8, armorClass: 12, weapon: WEAPONS.BankersSpecial })"
             }
 
          ]
@@ -308,21 +309,77 @@
         ],
          "options": [
             {
-                "displayText" : "Hide.",
+                "displayText" : "Try to hide.",
                 "targetCard": "start_hide_thug1",
                 "precondition": "player.cautious >= 5"
             },
             {
-                "displayText" : "Punch him.",
-                "targetCard": "start_punch_thug1",
-                "precondition": "player.bold >= 5"
-            },
-            {
-                "displayText" : "Shoot him.",
-                "targetCard": "start_shoot_thug1",
+                "displayText" : "Attack him.",
+                "targetCard": "start_thug1_combat",
                 "precondition": "player.bold >= 5"
             }
          ]
+    },
+    "start_thug1_combat": {
+        "name": "start_thug1_combat",
+        "image": "office-hallway.png",
+        "overlayImage": "thug1.png",
+        "story": [
+            {
+                "precondition": "game.currentEnemy.hitpoints <= 0",
+                "story": [
+                    "play_sound: ./audio/male-death.mp3",
+                    "The goon drops like a sack of potatoes."
+                ]
+            },
+            {
+                "precondition": "game.currentEnemy.hitpoints > 0 && game.player.hitpoints > 0",
+                "story": [
+                    "The goon reaches for his piece. I have to act fast."
+                ]
+            },
+            {
+                "precondition": "game.player.hitpoints <= 0",
+                "story": [
+                    "I've taken too much abuse. Slowly, I get down to one knee, holding my bloody guts.",
+                    "p", "The world spins. It's getting dark. Darker...",
+                    "play_sound: ./audio/heartbeat.wav",
+                    "fade_out_image"
+                ]
+            }
+
+        ],
+        "options": [
+            {
+                "displayText" : "Punch him.",
+                "targetCard": "start_thug1_combat",
+                "precondition": "game.currentEnemy.hitpoints > 0 && game.player.bold >= 5 && game.player.hitpoints > 0",
+                "postcondition": "combat({playerAttacksFirst: true, playerWeapon: WEAPONS.Fists})"
+            },
+            {
+                "displayText" : "Shoot him.",
+                "targetCard": "start_thug1_combat",
+                "precondition": "game.currentEnemy.hitpoints > 0 && game.player.bold >= 5 && game.player.hitpoints > 0",
+                "postcondition": "combat({playerAttacksFirst: true, playerWeapon: WEAPONS.BankersSpecial})"
+            },
+            {
+                "displayText" : "Flee.",
+                "targetCard": "start_thug1_combat",
+                "precondition": "game.currentEnemy.hitpoints > 0 && game.player.hitpoints > 0"
+            },
+            {
+                "displayText" : "Attempt to rise.",
+                "targetCard": "death",
+                "precondition": "game.player.hitpoints <= 0",
+                "postcondition": "clearConsole()"
+            },
+            {
+                "displayText" : "Hide the body.",
+                "targetCard": "start_hide_body",
+                "precondition": "game.currentEnemy.hitpoints <= 0 && game.player.hitpoints > 0",
+                "postcondition": "clearConsole() && clearOverlayImage()"
+            }
+        ]
     },
     "start_hide_thug1": {
         "name": "start_hide_thug1",
@@ -338,33 +395,14 @@
            }
         ]
     },
-    "start_punch_thug1": {
-        "name": "start_punch_thug1",
+    "start_hide_body": {
+        "name": "start_hide_body",
         "image": "office-hallway.png",
         "story": [
-            "I keep very still in the corner, listening to the approaching steps.",
-            "play_sound: ./audio/footsteps-wood.ogg",
-            "p", " As the hatchetman approaches, I sucker punch him.",
-            "play_sound: ./audio/punch-argh.wav",
-            "play_sound: ./audio/male-death.mp3",
-            "p", "The chin music is too lively for the goon, who kisses the floor."
-        ],
-        "options": [
-           {
-               "displayText" : "Go to the garage.",
-               "targetCard": "start_car"
-           }
-        ]
-    },
-    "start_shoot_thug1": {
-        "name": "start_shoot_thug1",
-        "image": "office-hallway.png",
-        "story": [
-            "I keep very still in the corner, listening to the approaching steps.",
-            "play_sound: ./audio/footsteps-wood.ogg",
-            "p", " As the hatchetman approaches, I draw my heater and burn powder.",
-            "play_sound: ./audio/single-shot.wav",
-            "p", "He gets clipped in the face, and drops like a sack of potatoes. I drag him to an empty office, and fade from the scene."
+            "I drag the body into an empty office.",
+            "p", "No one seems to have noticed anything.",
+            "p", "Even if they did, people in this neighborhood know that being blind, deaf, and ignorant is the recipe to a long life.",
+            "p", "Hastily, I fade from the scene."
         ],
         "options": [
            {
@@ -383,6 +421,22 @@
            {
                "displayText" : "Go on.",
                "targetCard": "start_car"
+           }
+        ]
+    },
+    "death": {
+        "name": "death",
+        "image": "rip.png",
+        "story": [
+            "Curtain falls.",
+            "p", "I bid farewell and go to the big sleep.",
+            "p", "Better luck next time."
+        ],
+        "options": [
+           {
+               "displayText" : "Start new game.",
+               "targetCard": "start",
+               "postcondition": "startGame()"
            }
         ]
     }

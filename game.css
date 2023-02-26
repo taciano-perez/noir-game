@@ -1,0 +1,163 @@
+@font-face { font-family: AdvancedPixel7; src: url('./fonts/advanced_pixel-7.ttf'); font-size: 4em; } 
+@font-face { font-family: HomemadeApple; src: url('./fonts/HomemadeApple.ttf'); font-size: 2em; } 
+@font-face { font-family: MomsTypewriter; src: url('./fonts/Moms_typewriter.ttf'); font-size: 2em; } 
+.class { background-color: #704214; }
+span {
+    font-family: AdvancedPixel7;
+    font-size: 3em;
+}
+h1 {
+    font-family: AdvancedPixel7;
+    font-size: 4em;
+}
+h2 {
+    font-family: AdvancedPixel7;
+    font-size: 3em;
+}
+table, th, td {
+     border: 0px solid black;
+      border-collapse: collapse;
+}
+.user-option-header {
+    opacity: 0.5;			
+}
+.user-option {
+    opacity: 0.5;			
+}
+.user-option:hover {
+    opacity: 0.5;
+    background-color: lavenderblush;			
+}
+.container-popup {
+    position: relative;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0,0,0,.8);
+}
+.popup {
+    width: 50%;
+    background: #F8D5A7;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+}
+.game-button {
+    background-color: #F8D5A7;
+    font-family: AdvancedPixel7;
+    font-size: 2em;
+}
+.journal {
+    font-family: HomemadeApple;
+    font-size: 2em;
+}
+.typewriter {
+    font-family: MomsTypewriter;
+    font-size: 1em;
+}
+.typewriter-title {
+    font-family: MomsTypewriter;
+    font-size: 4em;
+}
+/* hover boxes */
+[data-title]:hover:after {
+    opacity: 1;
+    transition: all 0.1s ease 0.5s;
+    visibility: visible;
+}
+[data-title]:after {
+    content: attr(data-title);
+    font-family: AdvancedPixel7;
+    background-color: #625950;
+    color: #fff;
+    font-size: 1em;
+    position: absolute;
+    padding: 1px 5px 2px 5px;
+    bottom: -1.6em;
+    left: 100%;
+    white-space: nowrap;
+    box-shadow: 1px 1px 3px #222222;
+    opacity: 0;
+    border: 1px solid #111111;
+    z-index: 99999;
+    visibility: hidden;
+}
+[data-title] {
+    position: relative;
+}		
+/* image */
+.image-parent {
+    position: relative;
+    top: 0;
+    left: 0;
+}
+.image1 {
+    position: relative;
+    top: 0;
+    left: 0;
+}
+.image2 {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+/* console */
+.console {
+    font-family: AdvancedPixel7;
+    font-size: 0.5em;
+}
+/* health bar  */
+progress {
+
+    /* Reset the default appearance */
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+  
+    /* Get rid of default border in Firefox. */
+    border: none;
+  
+    /* Dimensions */
+    height: 10px;
+  }
+  
+  .progress-20 {
+    color: red; 
+  }
+  
+  .progress-20::-webkit-progress-value {
+    background-color:red;
+  }
+  
+  .progress-20::-moz-progress-bar {
+    background-color:red;
+  }
+  
+  .progress-50 {
+    color: yellow; 
+  }
+  
+  .progress-50::-webkit-progress-value {
+    background-color:yellow;
+  }
+  
+  .progress-50::-moz-progress-bar {
+    background-color:yellow;
+  }
+
+  .progress-100 {
+    color: green; 
+  }
+  
+  .progress-100::-webkit-progress-value {
+    background-color:green;
+  }
+  
+  .progress-100::-moz-progress-bar {
+    background-color:green;
+  }
