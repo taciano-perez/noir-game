@@ -26,6 +26,10 @@ A text-oriented game in JavaScript.
 - Slang is heavily used. See [reference1](https://www.miskatonic.org/slang.html), [reference2](http://www.classiccrimefiction.com/hardboiled-slang.htm), [reference3](https://atleb.tripod.com/ordbok/hardboiled_slang.htm).
 - Guns used in hardboiled fiction: (http://raymondchandlercrimeglossary.blogspot.com/p/the-guns-of-raymond-chandler.html)
 
+### Reference material
+
+- https://thrillingdetective.com/2020/12/03/dangerous-dames/
+
 ### Story
 
 I will not detail the story in order to prevent spoilers. The below list helps me keep track of the major parts that need to be done.

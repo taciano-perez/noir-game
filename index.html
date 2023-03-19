@@ -7,13 +7,16 @@
 <body style="background-color:#eec49b;">
 	<div id="start-screen">
 		<center>
-			<img src="./img/noir-cover.png" height="70%"> <br>
+			<img src="./img/noir-cover.png" height="60%"> <br>
 			<span class="typewriter-title">Noir.</span> <br>
 			&nbsp; <br>
-			<!-- start button showCharacterBuilderWindow -->
-			<button onClick="startGame();" class="game-button">New Game</button>
+			<button onClick="showCharacterBuilderWindow();" class="game-button">New Game (Create Character)</button>
 			<br> &nbsp; <br>
-			<span>Version 0.1.6</span> <br>
+			<button onClick="startGame(PLAYER_SAM_SPADE);" class="game-button">New Game (Sam Spade)</button>
+			<br> &nbsp; <br>
+			<button onClick="startGame(PLAYER_CARRIE_CASHIN);" class="game-button">New Game (Carrie Cashin)</button>
+			<br> &nbsp; <br>
+			<span>Version 0.1.7</span> <br>
 			<span>19 Mar 2023</span>
 		</center>
 	</div>
@@ -33,7 +36,7 @@
 				<!-- character area -->
 				<td valign="top" width="20%">
 					<center>
-						<img src="./img/bogart.png" width="50%"> <br>
+						<div id="character-image"></div>
 						<div id="healthbar"></div>
 						<span id="character-name"></span>
 						&nbsp; <br>
@@ -66,12 +69,14 @@
 			<center>
 				<b><span>New Character</span></b>
 				<br>
-				<span>First Name:</span> <input type="text" id="character-firstname" name="character-firstname" required maxlength="12" size="14" class="game-button"> <br>
-				<span> Last Name:</span> <input type="text" id="character-lastname"  name="character-lastname"  required maxlength="12" size="14" class="game-button"> <br>
+				<span>First Name:</span> <input type="text" id="character-builder-firstname" name="character-builder-firstname" required maxlength="12" size="14" class="game-button"> <br>
+				<span> Last Name:</span> <input type="text" id="character-builder-lastname"  name="character-builder-lastname"  required maxlength="12" size="14" class="game-button"> <br>
+				<span>Gender: [X] Male [ ] Female</span>
 				<span>Abilities</span>
 				<table id="character-builder-abilities" width="50%">
 				</table>
-				<button onClick="startGame();" class="game-button">Start Game</button>
+				<button onClick="createCharacter();" class="game-button">Start Game</button>&nbsp;&nbsp;&nbsp;&nbsp;<button onClick="hideCharacterBuilderWindow();" class="game-button">Cancel</button>
+
 			</center>
 		</div>
 	</div>
