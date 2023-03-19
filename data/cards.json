@@ -419,8 +419,9 @@
         ],
         "options": [
            {
-               "displayText" : "Go on.",
-               "targetCard": "start_car"
+               "displayText" : "Step in the car.",
+               "targetCard": "start_car",
+               "postcondition": "showMapWindow()"
            }
         ]
     },
@@ -437,6 +438,25 @@
                "displayText" : "Start new game.",
                "targetCard": "start",
                "postcondition": "startGame()"
+           }
+        ]
+    },
+    "start_chapter2": {
+        "name": "start_chapter2",
+        "image": "city-park-gates.png",
+        "story": [
+            "<b>Chapter II: The Missing Brother</b>",
+            "p", "My boiler coughs and fits but rolls steadily towards the City Park.",
+            "I leave it on the parking lot near the main gate.",
+            "p", "Stepping out, I look around and take in the sights.",
+            "The ground is muddy and the grass unkept. The air smells of rotten leaves and dog shit.",
+            "Once a proud landmark, the old park is slowly crumbling apart.",
+            "p","Near the main gate fence I see a bum sitting on a bench feeding crumbs to a large raven."
+         ],
+        "options": [
+           {
+               "displayText" : "Go on.",
+               "postcondition": "showMapWindow()"
            }
         ]
     }

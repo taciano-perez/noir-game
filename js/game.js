@@ -9,6 +9,20 @@ fetch('./data/objects.json')
     .then((response) => response.json())
     .then((json) => objects = json);    
 
+const landmarks = {
+    "office": {
+        "description": "My office.",
+        "thumbnail": "office-landmark.png",
+        "targetCard": "start_car"
+    },
+    "park": {
+        "description": "The City Park.",
+        "thumbnail": "park-landmark.png",
+        "targetCard": "start_chapter2"
+    }
+
+}
+
 // DOM elements
 const start_screen = document.getElementById("start-screen"); 
 const main_screen = document.getElementById("main-screen");
@@ -25,6 +39,8 @@ const character_builder_window = document.getElementById("character-builder");
 const character_builder_abilities = document.getElementById("character-builder-abilities");
 const inventory_window = document.getElementById("inventory");
 const inventory_table = document.getElementById("inventory-table");
+const map_window = document.getElementById("map");
+const map_table = document.getElementById("map-table");
 const object_window = document.getElementById("show-object");
 const object_image = document.getElementById("object-image");
 const console_pane = document.getElementById("console");
@@ -66,6 +82,7 @@ class Game {
         }
         this.currentEnemy = undefined;
         this.card = undefined;
+        this.mapLandmarks = [,"office",,,,,,,"park",];   // sparse array
     }
 }
 
@@ -205,6 +222,47 @@ function showObject(obj_name) {
 function hideObject() {
     object_window.hidden = true;
 }
+
+function renderMapLandmark(index) {
+    var landmark_name = game.mapLandmarks[index];
+    var landmark = landmarks[landmark_name];
+    if (typeof landmark == 'undefined') {
+        return '<td width="10%" align="center"> <img src="./img/empty-image.png" width="80%" /> </td>';
+    } else {
+        return '<td width="10%" align="center"> <div data-title="' + landmark.description + '"> <img src="./img/'+ landmark.thumbnail + '" width="50%" onClick="travelTo(\'' + landmark.targetCard + '\')"/> </div> </td> ';
+    }
+}
+
+async function travelTo(targetCard) {
+    hideMapWindow();
+    displayCard(cards[targetCard]);
+}
+
+function showMapWindow() {
+    var table_body = "";
+    // render upper row
+    table_body += '<tr>';
+    for (i=0; i<5; i++) {
+        table_body += renderMapLandmark(i);
+    }
+    table_body += '</tr>';
+    // render bottom row
+    table_body += '<tr>';
+    for (i=5; i<10; i++) {
+        table_body += renderMapLandmark(i);
+    }
+    table_body += '</tr>';
+    map_table.innerHTML = table_body;
+
+    map_window.hidden = false;
+
+    playAudio("./audio/car-start.wav", SOUND_GAIN_MEDIUM);
+}
+
+function hideMapWindow() {
+    map_window.hidden = true;
+}
+
 
 function hideCharacterWindow() {
     inventory_window.hidden = true;

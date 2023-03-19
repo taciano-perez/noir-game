@@ -13,8 +13,8 @@
 			<!-- start button showCharacterBuilderWindow -->
 			<button onClick="startGame();" class="game-button">New Game</button>
 			<br> &nbsp; <br>
-			<span>Version 0.1.5</span> <br>
-			<span>26 Feb 2023</span>
+			<span>Version 0.1.6</span> <br>
+			<span>19 Mar 2023</span>
 		</center>
 	</div>
 	<div id="main-screen" hidden="true">
@@ -120,6 +120,18 @@
 			<div>
 				<center>
 					<table width="80%" id="inventory-table">
+					</table>
+				</center>
+			</div>
+		</div>
+	</div>
+	<div class="container-popup" id="map" hidden="true">
+		<div class="popup" style="background: #ffffff url('./img/triste-le-roy-map.png'); padding: 10px; background-size: contain; background-repeat: no-repeat; aspect-ratio: 1217/883;">
+			<div align="right"><button onClick="hideMapWindow();" class="game-button"> X </button></div>
+			<div id="empty-space" width="100%" style="height: 20%;">&nbsp;</div>
+			<div>
+				<center>
+					<table width="80%" id="map-table">
 					</table>
 				</center>
 			</div>
