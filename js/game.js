@@ -37,6 +37,8 @@ const notebook_window = document.getElementById("notebook");
 const records_window = document.getElementById("records");
 const records_body = document.getElementById("records-body");
 const character_builder_window = document.getElementById("character-builder");
+const character_builder_gender = document.getElementById("character-builder-gender");
+const character_builder_image = document.getElementById("character-builder-image");
 const character_builder_abilities = document.getElementById("character-builder-abilities");
 const inventory_window = document.getElementById("inventory");
 const inventory_table = document.getElementById("inventory-table");
@@ -59,6 +61,8 @@ class Weapon {
 // game constants
 const TOTAL_CHARACTER_POINTS = 40;
 const PLAYER_MAX_HITPOINTS = 100;
+const MALE = "male";
+const FEMALE = "female";
 const AMMO_INFINITE = -1;
 const WEAPONS = {
     Fists: new Weapon({name: "fists", ammo: AMMO_INFINITE, attackNumDice: 1, attackCap: 4}),    // 1d4 + STR
@@ -88,12 +92,13 @@ class Game {
 }
 
 class Player {
-    constructor({firstname = "Sam", lastname = "Spade", image = "bogart.png", hitpoints = PLAYER_MAX_HITPOINTS, armorClass=12, weapon = WEAPONS.BankersSpecial, money = 15, muscle = 5, moxie = 5, handEyeCoordination = 5,  suavity = 5, erudition = 5, streetsmarts = 5, faith = 5 } = {}) {
+    constructor({firstname = "Sam", lastname = "Spade", image = "bogart.png", gender = MALE, hitpoints = PLAYER_MAX_HITPOINTS, armorClass=12, weapon = WEAPONS.BankersSpecial, money = 15, muscle = 5, moxie = 5, handEyeCoordination = 5,  suavity = 5, erudition = 5, streetsmarts = 5, faith = 5 } = {}) {
         // name
         this.firstname = firstname;
         this.lastname = lastname;
-        // image
+        // image, gender
         this.image = image;
+        this.gender = gender;
         // stats
         this.hitpoints = hitpoints;
         this.armorClass = armorClass;
@@ -170,22 +175,6 @@ function startGame(aPlayer) {
     main_screen.hidden = false;
     playMusic();
     displayCard(cards.start);
-}
-
-function showCharacterBuilderWindow() {
-    editCharacterAbilities(character_builder_abilities);
-    character_builder_window.hidden = false;
-}
-
-function hideCharacterBuilderWindow() {
-    character_builder_window.hidden = true;
-}
-
-function createCharacter() {
-    const firstname = document.getElementById('character-builder-firstname').value;
-    const lastname = document.getElementById('character-builder-lastname').value;
-    hideCharacterBuilderWindow();
-    startGame(new Player({firstname: firstname, lastname: lastname, image: "bogart.png", muscle: game.player.muscle, moxie: game.player.moxie, handEyeCoordination: game.player.handEyeCoordination, suavity: game.player.suavity, erudition: game.player.erudition, streetsmarts: game.player.streetsmarts, faith: game.player.faith }));
 }
 
 function showCharacterWindow() {
@@ -297,16 +286,61 @@ function hideRecordsWindow() {
     records_window.hidden = true;
 }
 
+function showCharacterBuilderWindow() {
+    editCharacterAbilities(character_builder_abilities);
+    var male_checked = "checked";
+    var female_checked = "";
+    if (game.player.gender == FEMALE) {
+        female_checked = "checked";
+        male_checked = "";
+    }
+    character_builder_gender.innerHTML = 
+        `<input type="radio" id="radio-male" name="gender" value="male" class='game-button' ${male_checked} onClick="swapGender();">
+        <label for="radio-male">Male</label> <br>
+        <input type="radio" id="radio-female" name="gender" value="female" class='game-button' ${female_checked} onClick="swapGender();">
+        <label for="radio-female">Female</label>`;
+    if (game.player.gender == FEMALE) {
+        character_builder_image.innerHTML = `<img src="img/bacall.png" width="104">`;
+    } else {
+        character_builder_image.innerHTML = `<img src="img/bogart.png" width="104">`;
+    }
+    character_builder_window.hidden = false;
+}
+
+function hideCharacterBuilderWindow() {
+    character_builder_window.hidden = true;
+}
+
+function swapGender() {
+    if (game.player.gender == MALE) {
+        game.player.gender = FEMALE;
+    } else {
+        game.player.gender = MALE;
+    }
+    showCharacterBuilderWindow();   // refresh
+}
+
+function createCharacter() {
+    const firstname = document.getElementById('character-builder-firstname').value;
+    const lastname = document.getElementById('character-builder-lastname').value;
+    var imageName = "bogart.png";
+    if (game.player.gender == FEMALE) {
+        imageName = "bacall.png";
+    }
+    hideCharacterBuilderWindow();
+    startGame(new Player({firstname: firstname, lastname: lastname, image: imageName, gender: game.player.gender, muscle: game.player.muscle, moxie: game.player.moxie, handEyeCoordination: game.player.handEyeCoordination, suavity: game.player.suavity, erudition: game.player.erudition, streetsmarts: game.player.streetsmarts, faith: game.player.faith }));
+}
+
 function editCharacterAbilities(pane) {   
     pane.innerHTML = "";
-    pane.innerHTML += "<tr><td colspan=4><span style='text-align: center;'> Points to distribute: " + game.player.remainingPoints() + "</span></td></tr>";
-    pane.innerHTML += "<tr><td><span data-title='Affects strength feats and hand to hand combat.'>Muscle               : </span></td>&nbsp;&nbsp;&nbsp;<td><button class='game-button' onClick='decreaseAbility(\"muscle\");'>-</button> <span>" + game.player.muscle + "</span> <button class='game-button' onClick='increaseAbility(\"muscle\");'>+</button></td></tr>";
-    pane.innerHTML += "<tr><td><span data-title='How much abuse you can suffer before giving up the ghost. Also affects how well you hold your liquor.'>Moxie                : </span></td>&nbsp;&nbsp;&nbsp;<td><button class='game-button' onClick='decreaseAbility(\"moxie\");'>-</button> <span>" + game.player.moxie + "</span> <button class='game-button' onClick='increaseAbility(\"moxie\");'>+</button></td></tr>";
-    pane.innerHTML += "<tr><td><span data-title='Influences shooting and blade skills, as well as lock picking and sleight of hand.'>Hand-eye coordination : </span></td>&nbsp;&nbsp;&nbsp;<td><button class='game-button' onClick='decreaseAbility(\"handEyeCoordination\");'>-</button> <span>" + game.player.handEyeCoordination + "</span> <button class='game-button' onClick='increaseAbility(\"handEyeCoordination\");'>+</button></td></tr>";
-    pane.innerHTML += "<tr><td><span data-title='How good you are in talking people into giving you what you want.'>Suavity              : </span></td>&nbsp;&nbsp;&nbsp;<td><button class='game-button' onClick='decreaseAbility(\"suavity\");'>-</button> <span>" + game.player.suavity + "</span> <button class='game-button' onClick='increaseAbility(\"suavity\");'>+</button></td></tr>";
-    pane.innerHTML += "<tr><td><span data-title='The kind of knowledge you only find in books.'>Erudition            : </span></td>&nbsp;&nbsp;&nbsp;<td><button class='game-button' onClick='decreaseAbility(\"erudition\");'>-</button> <span>" + game.player.erudition + "</span> <button class='game-button' onClick='increaseAbility(\"erudition\");'>+</button></td></tr>";
-    pane.innerHTML += "<tr><td><span data-title='The kind of knowledge you cannot find in any book.'>Street smarts        : </span></td>&nbsp;&nbsp;&nbsp;<td><button class='game-button' onClick='decreaseAbility(\"streetsmarts\");'>-</button> <span>" + game.player.streetsmarts + "</span> <button class='game-button' onClick='increaseAbility(\"streetsmarts\");'>+</button></td></tr>";
-    pane.innerHTML += "<tr><td><span data-title=\"How much you gamble in Pascal's Wager.\">Faith        : </span></td>&nbsp;&nbsp;&nbsp;<td><button class='game-button' onClick='decreaseAbility(\"faith\");'>-</button> <span>" + game.player.faith + "</span> <button class='game-button' onClick='increaseAbility(\"faith\");'>+</button></td></tr>";
+    pane.innerHTML += "<tr><td colspan=4 style='text-align: center;'><span> (points to distribute: " + game.player.remainingPoints() + ")</span></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title='Affects strength feats and hand to hand combat.'>Muscle               : </span></td><td><button class='game-button' onClick='decreaseAbility(\"muscle\");'>-</button> <span>" + game.player.muscle + "</span> <button class='game-button' onClick='increaseAbility(\"muscle\");'>+</button></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title='How much abuse you can suffer before giving up the ghost. Also affects how well you hold your liquor.'>Moxie                : </span></td><td><button class='game-button' onClick='decreaseAbility(\"moxie\");'>-</button> <span>" + game.player.moxie + "</span> <button class='game-button' onClick='increaseAbility(\"moxie\");'>+</button></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title='Influences shooting and blade skills, as well as lock picking and sleight of hand.'>Hand-eye coordination : </span></td><td><button class='game-button' onClick='decreaseAbility(\"handEyeCoordination\");'>-</button> <span>" + game.player.handEyeCoordination + "</span> <button class='game-button' onClick='increaseAbility(\"handEyeCoordination\");'>+</button></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title='How good you are in talking people into giving you what you want.'>Suavity              : </span></td><td><button class='game-button' onClick='decreaseAbility(\"suavity\");'>-</button> <span>" + game.player.suavity + "</span> <button class='game-button' onClick='increaseAbility(\"suavity\");'>+</button></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title='The kind of knowledge you only find in books.'>Erudition            : </span></td><td><button class='game-button' onClick='decreaseAbility(\"erudition\");'>-</button> <span>" + game.player.erudition + "</span> <button class='game-button' onClick='increaseAbility(\"erudition\");'>+</button></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title='The kind of knowledge you cannot find in any book.'>Street smarts        : </span></td><td><button class='game-button' onClick='decreaseAbility(\"streetsmarts\");'>-</button> <span>" + game.player.streetsmarts + "</span> <button class='game-button' onClick='increaseAbility(\"streetsmarts\");'>+</button></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title=\"How much you gamble in Pascal's Wager.\">Faith        : </span></td><td><button class='game-button' onClick='decreaseAbility(\"faith\");'>-</button> <span>" + game.player.faith + "</span> <button class='game-button' onClick='increaseAbility(\"faith\");'>+</button></td></tr>";
 }
 
 function increaseAbility(ability) {
@@ -317,19 +351,21 @@ function increaseAbility(ability) {
 }
 
 function decreaseAbility(ability) {
-    game.player[ability] -= 1;
+    if (game.player[ability] > 0) {
+        game.player[ability] -= 1;
+    }
     editCharacterAbilities(character_builder_abilities);
 }
 
 function displayCharacterAbilities(pane) {   
     pane.innerHTML = "";
-    pane.innerHTML += "<tr><td><span data-title='Affects strength feats and hand to hand combat.'>Muscle               : </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.muscle + "</span></td></tr>";
-    pane.innerHTML += "<tr><td><span data-title='How much abuse you can suffer before giving up the ghost. Also affects how well you hold your liquor.'>Moxie                : </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.moxie + "</span></td></tr>";
-    pane.innerHTML += "<tr><td><span data-title='Influences shooting and blade skills, as well as lock picking and sleight of hand.'>Hand-eye coordination: </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.handEyeCoordination + "</span></td></tr>";
-    pane.innerHTML += "<tr><td><span data-title='How good you are in talking people into giving you what you want.'>Suavity              : </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.suavity + "</span></td></tr>";
-    pane.innerHTML += "<tr><td><span data-title='The kind of knowledge you only find in books.'>Erudition            : </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.erudition + "</span></td></tr>";
-    pane.innerHTML += "<tr><td><span data-title='The kind of knowledge you cannot find in any book.'>Street smarts        : </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.streetsmarts + "</span></td></tr>";
-    pane.innerHTML += "<tr><td><span data-title=\"How much you gamble in Pascal's Wager.\">Faith        : </span></td>&nbsp;&nbsp;&nbsp;<td><span>" + game.player.faith + "</span></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title='Affects strength feats and hand to hand combat.'>Muscle               : </span></td><td><span>" + game.player.muscle + "</span></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title='How much abuse you can suffer before giving up the ghost. Also affects how well you hold your liquor.'>Moxie                : </span></td><td><span>" + game.player.moxie + "</span></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title='Influences shooting and blade skills, as well as lock picking and sleight of hand.'>Hand-eye coordination: </span></td><td><span>" + game.player.handEyeCoordination + "</span></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title='How good you are in talking people into giving you what you want.'>Suavity              : </span></td><td><span>" + game.player.suavity + "</span></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title='The kind of knowledge you only find in books.'>Erudition            : </span></td><td><span>" + game.player.erudition + "</span></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title='The kind of knowledge you cannot find in any book.'>Street smarts        : </span></td><td><span>" + game.player.streetsmarts + "</span></td></tr>";
+    pane.innerHTML += "<tr><td><span data-title=\"How much you gamble in Pascal's Wager.\">Faith        : </span></td><td><span>" + game.player.faith + "</span></td></tr>";
 }
 
 function updateHealthBar(player) {

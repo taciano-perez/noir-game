@@ -309,7 +309,7 @@
         ],
          "options": [
             {
-                "displayText" : "Try to hide.",
+                "displayText" : "Hide.",
                 "targetCard": "start_hide_thug1",
                 "precondition": "player.cautious >= 5"
             },
