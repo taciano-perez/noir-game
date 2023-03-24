@@ -34,6 +34,7 @@ const character_image = document.getElementById("character-image");
 const character_window = document.getElementById("character-stats");
 const character_abilities = document.getElementById("character-abilities");
 const notebook_window = document.getElementById("notebook");
+const notebook_entries = document.getElementById("notebook-entries");
 const records_window = document.getElementById("records");
 const records_body = document.getElementById("records-body");
 const character_builder_window = document.getElementById("character-builder");
@@ -71,7 +72,7 @@ const WEAPONS = {
 }
 
 // debug constants
-const DEBUG = false;
+const DEBUG = true;
 
 class Game {
     constructor(player) {
@@ -90,6 +91,7 @@ class Game {
         this.card = undefined;
         this.mapLandmarks = [,"office",,,,,,,"park",];   // sparse array
         this.consoleQueue = [];
+        this.notebook = [];
     }
 }
 
@@ -273,11 +275,19 @@ function hideMapWindow() {
 }
 
 function showNotebookWindow() {
+    notebook_entries.innerHTML = "";
+    game.notebook.forEach((entry, index) => {
+        notebook_entries.innerHTML += `<span class="journal">- ${entry}</span>`;
+    });
     notebook_window.hidden = false;
 }
 
 function hideNotebookWindow() {
     notebook_window.hidden = true;
+}
+
+function addToNotebook(entry) {
+    game.notebook.push(entry);
 }
 
 function showRecordsWindow() {
