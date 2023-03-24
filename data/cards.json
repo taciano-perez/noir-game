@@ -150,9 +150,10 @@
                 "postcondition": "state.start.question_how_you_found_me = true"
             },
             {
+                "precondition": "state.start.question_what_happened == true",
                 "displayText" : "Take the case.",
                 "targetCard": "start_client_talks5",
-                "precondition": "state.start.question_what_happened == true"
+                "postcondition": "addToNotebook(\"Search for my client's missing brother at the City Park.\")"
             }
          ]        
     },
@@ -182,9 +183,10 @@
                 "postcondition": "state.start.question_call_police = true"
             },
             {
+                "precondition": "state.start.question_what_happened == true",
                 "displayText" : "Take the case.",
                 "targetCard": "start_client_talks5",
-                "precondition": "state.start.question_what_happened == true"
+                "postcondition": "addToNotebook(\"Search for my client's missing brother at the City Park.\")"
             }
      ]
     },
@@ -213,9 +215,10 @@
                     "postcondition": "state.start.question_how_you_found_me = false"
                 },
                 {
+                    "precondition": "state.start.question_what_happened == true",
                     "displayText" : "Take the case.",
                     "targetCard": "start_client_talks5",
-                    "precondition": "state.start.question_what_happened == true"
+                    "postcondition": "addToNotebook(\"Search for my client's missing brother at the City Park.\")"
                 }
     ]
     },
@@ -238,9 +241,10 @@
                 ]
             },
             {
+                "precondition": "state.start.question_what_happened == true",
                 "displayText" : "Take the case.",
                 "targetCard": "start_client_talks5",
-                "precondition": "state.start.question_what_happened == true"
+                "postcondition": "addToNotebook(\"Search for my client's missing brother at the City Park.\")"
             }
      ]
     },

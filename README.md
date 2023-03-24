@@ -47,7 +47,8 @@ I will not detail the story in order to prevent spoilers. The below list helps m
 - [ ] Make it possible to flee from combat
 - [X] Combat takes character stats into account
 - [ ] Handguns need reloading
-- [ ] Implement Notebook functionality
+- [X] Implement Notebook functionality
+- [ ] Alert buttons when something changes (pulse?)
 
 ### Resources
 
