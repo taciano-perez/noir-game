@@ -12,7 +12,7 @@ A text-oriented game in JavaScript.
 ### Mechanics
 
 - [X] Text and dialogue-based. The story is narrated mostly via text (with auxiliary images and sounds, no animations). The player advances through the story by choosing how the character reacts to situations.
-- [ ] RPG elements. Your character has abilities and stats points, and those influence what you can/cannot do. In-story choices have consequences for your character build.
+- [X] RPG elements. Your character has abilities and stats points, and those influence what you can/cannot do. In-story choices have consequences for your character build.
 - [X] Inventory. The character has an inventory with the objects collected so far. Objects enable story choices. Inventory is kept simple, objects cannot be combined.
 - [X] Combat. The character faces hostile NPCs and can either fight or evade them (with multiple weapons/abilities).
 - [X] Map Navigation. The story takes place in multiple locations of the fictional city of Triste-le-Roy, and the player can navigate among them using a map.
@@ -44,7 +44,8 @@ I will not detail the story in order to prevent spoilers. The below list helps m
 - [ ] Automate testing
 - [ ] Music & sound controls
 - [ ] Incorporate combat fully in the main narrative panel (so case file isn't messed up)
-- [ ] Combat takes character stats into account
+- [ ] Make it possible to flee from combat
+- [X] Combat takes character stats into account
 - [ ] Handguns need reloading
 - [ ] Implement Notebook functionality
 
@@ -74,7 +75,7 @@ The following free art resources have been used in making the game. We thank the
 
 #### Images
 
-- Most images were generated using DALL-E.
+- Most images were generated using DALL-E or Midjourney.
 - Some images were pixelated using (https://onlineimagetools.com/pixelate-image)
 
 The game and its assets are, unless otherwise indicated, copyright of Taciano Dreckmann Perez (C) 2023.

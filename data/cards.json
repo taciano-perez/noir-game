@@ -13,19 +13,23 @@
         "options": [
             {
                 "displayText" : "Open the door.",
-                "targetCard": "start_client_enters"
+                "targetCard": "start_client_enters",
+                "postcondition": "increaseTrait('bold', 0.1)"
             },
             {
                 "displayText" : "Ask who's there.",
-                "targetCard": "start_who_is_there"
+                "targetCard": "start_who_is_there",
+                "postcondition": "increaseTrait('cautious', 0.1)"
             },
             {
                 "displayText" : "Tell them to go away.",
-                "targetCard": "start_let_me_in2"
+                "targetCard": "start_let_me_in2",
+                "postcondition": "increaseTrait('cautious', 0.1)"
             },
             {
                 "displayText" : "Stay quiet.",
-                "targetCard": "start_let_me_in1"
+                "targetCard": "start_let_me_in1",
+                "postcondition": "increaseTrait('cautious', 0.1)"
             }
         ]
     },
@@ -190,7 +194,7 @@
         "story": [
             "\"Have you tried the buttons, honey?\" I blurt out. \"Old hammer and saws.\"",
             "p", "She reclines on her seat with an impish smile. \"I dabble in certain... activities that aren't entirely approved by the cops. I won't say more.\"",
-            "p", "\"But still, I deserve justice.\" Her gaze is fierce. \"And I will have it, one way or another."
+            "p", "\"But still, I deserve justice.\" Her gaze is fierce. \"One way or another."
         ],
          "options": [
                 {
@@ -250,8 +254,11 @@
         ],
          "options": [
             {
+                "precondition": "player.streetsmarts >= 5",
+                "label" : "Street Smarts",
                 "displayText" : "Ask for more money.",
-                "targetCard": "start_client_talks6"
+                "targetCard": "start_client_talks6",
+                "postcondition": "increaseTrait('bold', 0.1)"
             },
             {
                 "displayText" : "Accept it.",
@@ -445,7 +452,7 @@
         "name": "start_chapter2",
         "image": "city-park-gates.png",
         "story": [
-            "<b>Chapter II: The Missing Brother</b>",
+            "p", "<b>Chapter II: The Missing Brother</b>",
             "p", "My boiler coughs and fits but rolls steadily towards the City Park.",
             "I leave it on the parking lot near the main gate.",
             "p", "Stepping out, I look around and take in the sights.",

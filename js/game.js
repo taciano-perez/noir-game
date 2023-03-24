@@ -61,6 +61,7 @@ class Weapon {
 // game constants
 const TOTAL_CHARACTER_POINTS = 40;
 const PLAYER_MAX_HITPOINTS = 100;
+const MAX_TRAIT_VALUE = 10;
 const MALE = "male";
 const FEMALE = "female";
 const AMMO_INFINITE = -1;
@@ -88,6 +89,7 @@ class Game {
         this.currentEnemy = undefined;
         this.card = undefined;
         this.mapLandmarks = [,"office",,,,,,,"park",];   // sparse array
+        this.consoleQueue = [];
     }
 }
 
@@ -141,12 +143,13 @@ const PLAYER_SAM_SPADE = new Player();
 const PLAYER_CARRIE_CASHIN = new Player({firstname: "Carrie", lastname: "Cashin", image: "bacall.png"});
 
 class Enemy {
-    constructor({name = "Enemy", hitpoints = 10, attackNumDice= 1, attackCap = 6, armorClass = 8, weapon = WEAPONS.BankersSpecial} = {}) {
+    constructor({name = "Enemy", hitpoints = 10, attackNumDice= 1, attackCap = 6, armorClass = 8, weapon = WEAPONS.BankersSpecial, bold = 5} = {}) {
         this.name = name;
         this.armorClass = armorClass;
         this.hitpoints = hitpoints;
         this.maxHitpoints = hitpoints;
         this.setWeapon(weapon);
+        this.bold = bold;
     }
     setWeapon(weapon) {
         this.weapon = weapon;
@@ -344,7 +347,7 @@ function editCharacterAbilities(pane) {
 }
 
 function increaseAbility(ability) {
-    if (game.player.remainingPoints() > 0) {
+    if (game.player.remainingPoints() > 0 && game.player[ability] < MAX_TRAIT_VALUE) {
         game.player[ability] += 1;
     }
     editCharacterAbilities(character_builder_abilities);
@@ -366,6 +369,7 @@ function displayCharacterAbilities(pane) {
     pane.innerHTML += "<tr><td><span data-title='The kind of knowledge you only find in books.'>Erudition            : </span></td><td><span>" + game.player.erudition + "</span></td></tr>";
     pane.innerHTML += "<tr><td><span data-title='The kind of knowledge you cannot find in any book.'>Street smarts        : </span></td><td><span>" + game.player.streetsmarts + "</span></td></tr>";
     pane.innerHTML += "<tr><td><span data-title=\"How much you gamble in Pascal's Wager.\">Faith        : </span></td><td><span>" + game.player.faith + "</span></td></tr>";
+    pane.innerHTML += `<tr><td colspan=2><center><div class="slidecontainer"><span data-title='Cautious characters are better at evading danger.'>Cautious</span> <input type="range" min="0" max="10" value="${game.player.bold}" class="slider" id="myRange" disabled> <span data-title='Bold characters deal more damage.'>Bold</span></div></center></td>`;
 }
 
 function updateHealthBar(player) {
@@ -379,8 +383,10 @@ async function displayCard(card) {
     game.card = card;
     clearStory();
     clearOptions();
+    clearConsole();
     displayImage(card);
     updateHealthBar(game.player);
+    flushConsoleQueue();
     await displayStory(card.story);
     displayOptions(card);
 }
@@ -411,14 +417,16 @@ function displayOptions(card) {
     options_pane.innerHTML += "<span class='user-option-header'>What should I do?</span> <br>";
     card.options.forEach((option, index) => {
         if (option.precondition !== undefined) {    // is there a precondition?
-            var precond = option.precondition
-            if (option.precondition.startsWith('state.') || option.precondition.startsWith('player.')) {
-                precond = "this.game." + precond;
-            }
-            const result = indirectEval(precond);
-            if (!result) return;  // if precondition is not satisfied, skip this option
-    }
-        options_pane.innerHTML += "<span onClick='chooseOption(cards." + card.name + ".options[" + index + "])' class=\"user-option\">&nbsp;&nbsp;" + option.displayText + "</span> <br>"
+                var precond = option.precondition
+                if (option.precondition.startsWith('state.') || option.precondition.startsWith('player.')) {
+                    precond = "this.game." + precond;
+                }
+                const result = indirectEval(precond);
+                if (!result) return;  // if precondition is not satisfied, skip this option
+        }
+        options_pane.innerHTML += "<span onClick='chooseOption(cards." + card.name + ".options[" + index + "])' class=\"user-option\">&nbsp;&nbsp;" + option.displayText + "</span>"
+        if (option.label !== undefined) options_pane.innerHTML += "&nbsp; <span class=\"user-option-label\">[" + option.label + "]</span>";
+        options_pane.innerHTML += " <br>"
     });
 }
 
@@ -527,16 +535,70 @@ function sentenceRecord(sentence) {
     return '<span class="typewriter">' + sentence + ' </span>';
 }
 
+function checkForOppositeTrait(trait, amount, increase) {
+    if (trait == 'cautious') {
+        if (increase) { decreaseTraitValue('bold', amount) }
+        else { increaseTraitValue('bold', amount) }
+    }
+    else if (trait == 'bold') {
+        if (increase) { decreaseTraitValue('cautious', amount); }
+        else { increaseTraitValue('cautious', amount) }
+    }
+}
+
+function increaseTrait(trait, amount) {
+    if (game.player[trait] === undefined) {
+        console.log('Error: trait [' + trait + '] is undefined.');
+    } else {
+        increaseTraitValue(trait, amount);
+        checkForOppositeTrait(trait, amount, true);
+    }
+}
+
+function increaseTraitValue(trait, amount) {
+    if ((game.player[trait] + amount) <= MAX_TRAIT_VALUE) {
+        game.player[trait] += amount;
+        queueConsoleMessage("+" + amount + " " + trait);
+    }
+}
+
+function decreaseTrait(trait, amount) {
+    if (game.player[trait] === undefined) {
+        console.log('Error: trait [' + trait + '] is undefined.');
+    } else {
+        decreaseTraitValue(trait);
+        checkForOppositeTrait(trait, amount, false);
+    }
+}
+
+function decreaseTraitValue(trait, amount) {
+    if ((game.player[trait] - amount) > 0) {
+        game.player[trait] -= amount;
+        queueConsoleMessage("-" + amount + " " + trait);
+    }
+}
+
 function writeConsole(message) {
-    console_pane.innerHTML += '<span>' + message + '</span><br>';
+    console_pane.innerHTML += '<span style="color:red">' + message + '</span><br>';
 }
 
 function clearConsole() {    
     console_pane.innerHTML = "";
 }
 
+function queueConsoleMessage(message) {
+    game.consoleQueue.push(message);
+}
+
+function flushConsoleQueue() {
+    while (game.consoleQueue.length > 0) {
+        var message = game.consoleQueue.shift();
+        writeConsole(message);
+    }
+}
+
 function combat({ playerAttacksFirst = true, playerWeapon = WEAPONS.Fists} = {}) {
-    clearConsole();
+    //clearConsole();
 
     // attack roll round (do any of the combatants hit each other)?
     var playerHitsEnemy = false;
@@ -549,19 +611,19 @@ function combat({ playerAttacksFirst = true, playerWeapon = WEAPONS.Fists} = {})
     if (playerHitsEnemy) {
         const damage = damageRoll(game.player, game.currentEnemy, playerWeapon);
         if (playerWeapon === WEAPONS.Fists) {
-            writeConsole("I punch " + game.currentEnemy.fullname() + " square in the chin.");
+            queueConsoleMessage("I punch " + game.currentEnemy.fullname() + " square in the chin.");
             playAudio('./audio/punch-boxing.wav', SOUND_GAIN_FULL);
         } else {
-            writeConsole("I aim true and squeeze the trigger of my " + game.player.weapon.name + ".");
+            queueConsoleMessage("I aim true and squeeze the trigger of my " + game.player.weapon.name + ".");
             playAudio('./audio/single-shot.wav', SOUND_GAIN_FULL);
         }
-        writeConsole("I deal " + damage + " damage points to " + game.currentEnemy.fullname() + ".");
-        writeConsole(game.currentEnemy.fullname() + " has now " + game.currentEnemy.hitpoints + " hitpoint(s) ("+ game.currentEnemy.healthPercentage()  + "% health).");
+        queueConsoleMessage("I deal " + damage + " damage points to " + game.currentEnemy.fullname() + ".");
+        queueConsoleMessage(game.currentEnemy.fullname() + " has now " + game.currentEnemy.hitpoints + " hitpoint(s) ("+ game.currentEnemy.healthPercentage()  + "% health).");
     } else {
         if (playerWeapon === WEAPONS.Fists) {
-            writeConsole("I unleash my fist in a vicious uppercut, but the bastard shuffles and dodges it.");
+            queueConsoleMessage("I unleash my fist in a vicious uppercut, but the bastard shuffles and dodges it.");
         } else {
-            writeConsole("I pump metal with my " + game.player.weapon.name + ", but the recoil makes me miss the shot.");
+            queueConsoleMessage("I pump metal with my " + game.player.weapon.name + ", but the recoil makes me miss the shot.");
             playAudio('./audio/single-shot.wav', SOUND_GAIN_FULL);
         }
     }
@@ -569,17 +631,16 @@ function combat({ playerAttacksFirst = true, playerWeapon = WEAPONS.Fists} = {})
         writeConsole('');   // empty line
         if (enemyHitsPlayer) {
             const damage = damageRoll(game.currentEnemy, game.player, game.currentEnemy.weapon);
-            writeConsole(game.currentEnemy.fullname() + " shoots at me.");
-            writeConsole("I take " + damage + " damage points.");
-            writeConsole("I have now " + game.player.hitpoints + " hitpoint(s) ("+ game.player.healthPercentage()  + "% health).");
+            queueConsoleMessage(game.currentEnemy.fullname() + " shoots at me.");
+            queueConsoleMessage("I take " + damage + " damage points.");
+            queueConsoleMessage("I have now " + game.player.hitpoints + " hitpoint(s) ("+ game.player.healthPercentage()  + "% health).");
         } else {
-            writeConsole(game.currentEnemy.fullname() + " throws lead at me, but the palooka misses it.");
+            queueConsoleMessage(game.currentEnemy.fullname() + " throws lead at me, but the palooka misses it.");
             playAudio('./audio/bullet-flyby.wav', SOUND_GAIN_FULL);
         }
     } else {
-        writeConsole("You've sent " + game.currentEnemy.fullname() + " to the big sleep.");
+        queueConsoleMessage("You've sent " + game.currentEnemy.fullname() + " to the big sleep.");
         playAudio('./audio/male-death.mp3', SOUND_GAIN_FULL);
-
     }
 
 }
@@ -587,12 +648,22 @@ function combat({ playerAttacksFirst = true, playerWeapon = WEAPONS.Fists} = {})
 // determines if an attack hits or misses
 // returns a boolean (true = hit)
 function attackRoll(attacker, target, weapon) {
-    // TODO: use attacker stats to change odds
     var hit = false;
     var roll = 0;
     for (n=0; n<weapon.attackNumDice; n++) {
         roll += rollDice(weapon.attackCap);
     }
+
+    // PLAYER ATTACK MODIFIERS
+    if (attacker instanceof Player) {
+        // players roll up to +1 hp per handEyeCoordination point when shooting
+        if (weapon !== WEAPONS.Fists) {
+            const sharpshoot = rollDice(Math.floor(attacker.handEyeCoordination));
+            roll += sharpshoot;
+            queueConsoleMessage(attacker.fullname() + " receives " + sharpshoot + " extra attack roll points for hand-eye coordination");
+        }
+    }
+
     if (roll < target.armorClass) {
         hit = true;
     }
@@ -602,12 +673,27 @@ function attackRoll(attacker, target, weapon) {
 // determines the attack damage
 // returns an integer between 1 and max weapon damage
 function damageRoll(attacker, target, weapon) {
-    // TODO: use attacker stats to change odds
     roll = 0;
     for (n=0; n<weapon.attackNumDice; n++) {
         roll += rollDice(weapon.attackCap);
     }
-    if (roll == 0) roll = 1;    // damage is at least 1 
+    
+    // PLAYER ATTACK MODIFIERS
+    if (attacker instanceof Player) {
+        // bold players get a bonus up to +5 hp, cautious characters get a penalty up to 4 hp
+        const boldness = Math.ceil(attacker.bold - 5);
+        queueConsoleMessage(attacker.fullname()  + " receives " + boldness + " hit points for boldness");
+        roll += boldness;   
+
+        // players roll up to +1 hp per muscle point in hand to hand combat
+        if (weapon === WEAPONS.Fists) {
+            const muscle = rollDice(Math.floor(attacker.muscle));
+            roll += muscle;
+            queueConsoleMessage(attacker.fullname() + " receives " + muscle + " hit points for muscle");
+        }
+    }
+
+    if (roll <= 0) roll = 1;    // damage is at least 1 
     damage = Math.min(roll, target.hitpoints);  // damage cannot exceed target's hitpoints
     target.hitpoints -= damage;
     return damage;
