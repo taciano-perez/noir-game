@@ -16,7 +16,7 @@ A text-oriented game in JavaScript.
 - [X] Inventory. The character has an inventory with the objects collected so far. Objects enable story choices. Inventory is kept simple, objects cannot be combined.
 - [X] Combat. The character faces hostile NPCs and can either fight or evade them (with multiple weapons/abilities).
 - [X] Map Navigation. The story takes place in multiple locations of the fictional city of Triste-le-Roy, and the player can navigate among them using a map.
-- [ ] Save/restore. The player can save the game and resume from a previous point.
+- [X] Save/restore. The player can save the game and resume from a previous point.
 - [X] PC-oriented. The game is meant to be played on a PC computer (desktop, laptop). If it can also run on a mobile device that's fine, but not a hard requirement.
 
 ### Theme and prose
