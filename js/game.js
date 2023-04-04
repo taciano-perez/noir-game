@@ -31,6 +31,7 @@ const story_pane = document.getElementById("story");
 const options_pane = document.getElementById("options"); 
 const character_name = document.getElementById("character-name");
 const character_image = document.getElementById("character-image");
+const game_loader_window = document.getElementById("game-loader");
 const character_window = document.getElementById("character-stats");
 const character_abilities = document.getElementById("character-abilities");
 const notebook_window = document.getElementById("notebook");
@@ -75,28 +76,33 @@ const WEAPONS = {
 const DEBUG = true;
 
 class Game {
-    constructor(player) {
+    constructor({version = "0.1.10", player, record = "", inventory= [ "bankers-special"], state, currentEnemy, card, mapLandmarks = [,"office",,,,,,,"park",], consoleQueue = [], notebook = []}) {
+        this.version = version;
         this.player = player;
-        this.record = "";
-        this.inventory = [ "bankers-special"];
-        this.state = {
-            start: {
-                "question_how_you_found_me" : false,
-                "question_call_police" : false,
-                "question_what_happened" : false,
-                "read_letter" : false
-            }
+        this.record = record; 
+        this.inventory = inventory;
+        if (state === undefined) {
+            this.state = {
+                start: {
+                    "question_how_you_found_me" : false,
+                    "question_call_police" : false,
+                    "question_what_happened" : false,
+                    "read_letter" : false
+                }
+            }    
+        } else {
+            this.state = state;
         }
-        this.currentEnemy = undefined;
-        this.card = undefined;
-        this.mapLandmarks = [,"office",,,,,,,"park",];   // sparse array
-        this.consoleQueue = [];
-        this.notebook = [];
+        this.currentEnemy = currentEnemy;
+        this.card = card;
+        this.mapLandmarks = mapLandmarks;
+        this.consoleQueue = consoleQueue;
+        this.notebook = notebook;
     }
 }
 
 class Player {
-    constructor({firstname = "Sam", lastname = "Spade", image = "bogart.png", gender = MALE, hitpoints = PLAYER_MAX_HITPOINTS, armorClass=12, weapon = WEAPONS.BankersSpecial, money = 15, muscle = 5, moxie = 5, handEyeCoordination = 5,  suavity = 5, erudition = 5, streetsmarts = 5, faith = 5 } = {}) {
+    constructor({firstname = "Sam", lastname = "Spade", image = "bogart.png", gender = MALE, hitpoints = PLAYER_MAX_HITPOINTS, armorClass=12, weapon = WEAPONS.BankersSpecial, money = 15, muscle = 5, moxie = 5, handEyeCoordination = 5,  suavity = 5, erudition = 5, streetsmarts = 5, faith = 5, cautious = 5, bold = 5 } = {}) {
         // name
         this.firstname = firstname;
         this.lastname = lastname;
@@ -120,8 +126,8 @@ class Player {
         this.faith = faith;
 
         // traits
-        this.cautious = 5;
-        this.bold = 5;
+        this.cautious = cautious;
+        this.bold = bold;
         // law-abiding -- criminal
         // 
     }
@@ -166,20 +172,92 @@ class Enemy {
     }
 }
 
-var game = new Game(new Player());
+var game = new Game({player: new Player()});
 
-function startGame(aPlayer) {
+function startGame(aPlayer, aGame) {
     var player = aPlayer;
     if (aPlayer === undefined) {
         player = new Player();
     }
-    game = new Game(player);
+    if (aGame === undefined) {
+        game = new Game({player: player});
+        game.card = cards.start;
+    } else {
+        game = aGame;
+    }
     character_image.innerHTML = `<img src="./img/${game.player.image}" width="50%"> <br>`;
     character_name.innerHTML = game.player.firstname + " " + game.player.lastname;
     start_screen.hidden = true;
     main_screen.hidden = false;
     playMusic();
-    displayCard(cards.start);
+    displayCard(game.card);
+}
+
+function getSavegameFile() {
+    return JSON.stringify(game);
+}
+
+function loadSavegameFile(json) {
+    // build objects
+    json.player = new Player(json.player);
+    if (json.currentEnemy !== undefined) {
+        json.currentEnemy = new Enemy(json.currentEnemy);
+    }
+    game = new Game(json);
+
+    // hide load window
+    hideGameLoaderWindow();
+
+    // resume game
+    startGame(json.player, game);
+}
+
+function showGameLoaderWindow() {
+    // Get the form and file field
+    let form = document.querySelector('#upload');
+    let file = document.querySelector('#file');
+    // Listen for submit events
+    form.addEventListener('submit', handleSubmit);
+
+    game_loader_window.hidden = false;
+}
+
+// from https://gomakethings.com/how-to-upload-and-process-a-json-file-with-vanilla-js/
+function handleSubmit (event) {
+	// Stop the form from reloading the page
+	event.preventDefault();
+
+	// If there's no file, do nothing
+	if (!file.value.length) return;
+
+    // Create a new FileReader() object
+	let reader = new FileReader();
+
+    // Setup the callback event to run when the file is read
+    reader.onload = logFile;
+
+    // Read the file
+	reader.readAsText(file.files[0]);
+}
+
+/**
+ * Log the uploaded file to the console
+ * @param {event} Event The file loaded event
+ */
+function logFile (event) {
+
+    // upload file
+	let str = event.target.result;
+	let json = JSON.parse(str);
+	//console.log('string', str);
+	//console.log('json', json);
+
+    loadSavegameFile(json);
+
+}
+
+function hideGameLoaderWindow() {
+    game_loader_window.hidden = true;
 }
 
 function showCharacterWindow() {
@@ -765,6 +843,27 @@ function fadeToBlack(id) {
     } else {    // DEBUG
         fade.style.opacity = 1;
     }
+}
+
+// from https://stackoverflow.com/questions/8310657/how-to-create-a-dynamic-file-link-for-download-in-javascript
+function downloadTextFile(name, contents, mime_type) {
+    mime_type = mime_type || "text/plain";
+
+    var blob = new Blob([contents], {type: mime_type});
+
+    var dlink = document.createElement('a');
+    dlink.download = name;
+    dlink.href = window.URL.createObjectURL(blob);
+    dlink.onclick = function(e) {
+        // revokeObjectURL needs a delay to work properly
+        var that = this;
+        setTimeout(function() {
+            window.URL.revokeObjectURL(that.href);
+        }, 1500);
+    };
+
+    dlink.click();
+    dlink.remove();
 }
 
 function sleep(ms) {

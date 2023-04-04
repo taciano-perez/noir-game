@@ -7,17 +7,19 @@
 <body style="background-color:#eec49b;">
 	<div id="start-screen">
 		<center>
-			<img src="./img/noir-cover.png" height="60%"> <br>
+			<img src="./img/noir-cover.png" height="40%"> <br>
 			<span class="typewriter-title">Noir.</span> <br>
 			&nbsp; <br>
 			<button onClick="showCharacterBuilderWindow();" class="game-button">New Game (Create Character)</button>
 			<br> &nbsp; <br>
-			<button onClick="startGame(PLAYER_SAM_SPADE);" class="game-button">New Game (Sam Spade)</button>
+			<button onClick="startGame(PLAYER_SAM_SPADE, undefined);" class="game-button">New Game (Sam Spade)</button>
 			<br> &nbsp; <br>
-			<button onClick="startGame(PLAYER_CARRIE_CASHIN);" class="game-button">New Game (Carrie Cashin)</button>
+			<button onClick="startGame(PLAYER_CARRIE_CASHIN, undefined);" class="game-button">New Game (Carrie Cashin)</button>
 			<br> &nbsp; <br>
-			<span>Version 0.1.9</span> <br>
-			<span>24 Mar 2023</span>
+			<button onClick="showGameLoaderWindow();" class="game-button">Load Previous Game</button>
+			<br> &nbsp; <br>
+			<span>Version 0.1.10</span> <br>
+			<span>04 Apr 2023</span>
 		</center>
 	</div>
 	<div id="main-screen" hidden="true">
@@ -47,6 +49,8 @@
 						<button onClick="showInventoryWindow();" class="game-button">Inventory</button> <br>
 						&nbsp; <br>
 						<button onClick="showRecordsWindow();" class="game-button">Case File</button> <br>
+						&nbsp; <br>
+						<button onClick='downloadTextFile("savegame.txt", getSavegameFile());' class="game-button">Save Game</button> <br>
 					</center>
 				</td>
 			</tr>
@@ -64,6 +68,19 @@
 	</div>
 
 	<!-- pop-up windows-->
+	<div class="container-popup" id="game-loader" hidden="true">
+		<div class="popup" style="height: 40%;">
+			<center>
+				<b><span>Load Game</span></b> <br>
+				<form id="upload">
+					<label for="file" class="game-button">Upload a previously saved game:</label> <br>
+					<input type="file"  class="game-button" id="file" accept=".txt"> <br>
+					&nbsp; <br>
+					<button class="game-button">Load Previous Game</button> <button onClick="hideGameLoaderWindow();" class="game-button">Cancel</button>
+				</form>					
+			</center>
+		</div>
+	</div>
 	<div class="container-popup" id="character-builder" hidden="true">
 		<div class="popup" style="height: 80%;">
 			<center>
