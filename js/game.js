@@ -37,6 +37,7 @@ const character_abilities = document.getElementById("character-abilities");
 const notebook_window = document.getElementById("notebook");
 const notebook_entries = document.getElementById("notebook-entries");
 const records_window = document.getElementById("records");
+const sound_controls_window = document.getElementById("sound-controls");
 const records_body = document.getElementById("records-body");
 const character_builder_window = document.getElementById("character-builder");
 const character_builder_gender = document.getElementById("character-builder-gender");
@@ -73,11 +74,13 @@ const WEAPONS = {
 }
 
 // debug constants
-const DEBUG = true;
+const DEBUG = false;
 
 class Game {
-    constructor({version = "0.1.10", player, record = "", inventory= [ "bankers-special"], state, currentEnemy, card, mapLandmarks = [,"office",,,,,,,"park",], consoleQueue = [], notebook = []}) {
+    constructor({version = "0.1.11", player, record = "", inventory= [ "bankers-special"], state, currentEnemy, card, mapLandmarks = [,"office",,,,,,,"park",], consoleQueue = [], notebook = [], musicVolume = 0.4, soundfxVolume = 0.5}) {
         this.version = version;
+        this.musicVolume = musicVolume;
+        this.soundfxVolume = soundfxVolume;
         this.player = player;
         this.record = record; 
         this.inventory = inventory;
@@ -377,6 +380,14 @@ function hideRecordsWindow() {
     records_window.hidden = true;
 }
 
+function showSoundControlsWindow() {
+    sound_controls_window.hidden = false;
+}
+
+function hideSoundControlsWindow() {
+    sound_controls_window.hidden = true;
+}
+
 function showCharacterBuilderWindow() {
     editCharacterAbilities(character_builder_abilities);
     var male_checked = "checked";
@@ -556,24 +567,74 @@ const SOUND_GAIN_FULL = 0.5;
 const SOUND_GAIN_MEDIUM = 0.3;
 const SOUND_GAIN_LOW = 0.1;
 
+var audioCtx = new AudioContext();
+var musicGain;
+var soundfxGain;
+
 function playAudio(sourceName, gain) {
     if (DEBUG) return;  // skip audio in DEBUG mode
 
-    const audioCtx = new AudioContext();
     const audio = new Audio(sourceName);
 
-    var gainNode = audioCtx.createGain()
-    gainNode.gain.value = gain;
-    gainNode.connect(audioCtx.destination)
+    if (soundfxGain === undefined) {
+        soundfxGain = audioCtx.createGain();
+        soundfxGain.gain.value = game.soundfxVolume;
+        soundfxGain.connect(audioCtx.destination)
+    }
 
     const source = audioCtx.createMediaElementSource(audio);
-    source.connect(gainNode);
+    source.connect(soundfxGain);
     audio.play();
 }
 
+function playMusicAudio(sourceName) {
+    if (DEBUG) return;  // skip music in DEBUG mode
+
+    const audio = new Audio(sourceName);
+
+    if (musicGain === undefined) {
+        musicGain = audioCtx.createGain();
+        musicGain.gain.value = game.musicVolume;
+        musicGain.connect(audioCtx.destination)
+    }
+
+    const source = audioCtx.createMediaElementSource(audio);
+    source.connect(musicGain);
+    audio.play();
+}
+
+
 function playMusic() {
-    playAudio("./audio/BennyCarter-Nightfall.mp3", SOUND_GAIN_LOW);
-    playAudio("./audio/rain.wav", SOUND_GAIN_LOW);
+    playMusicAudio("./audio/BennyCarter-Nightfall.mp3");
+    playAudio("./audio/rain.wav");
+}
+
+function decreaseMusicVolume() {
+    if (game.musicVolume > 0) {
+        game.musicVolume -= 0.1;
+        musicGain.gain.value = game.musicVolume;
+    }
+}
+
+function increaseMusicVolume() {
+    if (game.musicVolume < 1) {
+        game.musicVolume += 0.1;
+        musicGain.gain.value = game.musicVolume;
+    }
+}
+
+function decreaseSoundfxVolume() {
+    if (game.soundfxVolume > 0) {
+        game.soundfxVolume -= 0.1;
+        soundfxGain.gain.value = game.soundfxVolume;
+    }
+}
+
+function increaseSoundfxVolume() {
+    if (game.soundfxVolume < 1) {
+        game.soundfxVolume += 0.1;
+        soundfxGain.gain.value = game.soundfxVolume;
+    }
 }
 
 function clearStory() {
