@@ -18,8 +18,8 @@
 			<br> &nbsp; <br>
 			<button onClick="showGameLoaderWindow();" class="game-button">Load Previous Game</button>
 			<br> &nbsp; <br>
-			<span>Version 0.1.10</span> <br>
-			<span>04 Apr 2023</span>
+			<span>Version 0.1.11</span> <br>
+			<span>05 Apr 2023</span>
 		</center>
 	</div>
 	<div id="main-screen" hidden="true">
@@ -41,16 +41,23 @@
 						<div id="character-image"></div>
 						<div id="healthbar"></div>
 						<span id="character-name"></span>
-						&nbsp; <br>
-						<button onClick="showCharacterWindow();" class="game-button">Character Stats</button> <br>
-						&nbsp; <br>
-						<button onClick="showNotebookWindow();" class="game-button">Notebook</button> <br>
-						&nbsp; <br>
-						<button onClick="showInventoryWindow();" class="game-button">Inventory</button> <br>
-						&nbsp; <br>
-						<button onClick="showRecordsWindow();" class="game-button">Case File</button> <br>
-						&nbsp; <br>
-						<button onClick='downloadTextFile("savegame.txt", getSavegameFile());' class="game-button">Save Game</button> <br>
+						<br>
+						<table>
+							<tr>
+								<td align="right" style="padding: 0.2cm;"><button onClick="showCharacterWindow();" class="game-button">Character</button></td>
+								<td align="left" style="padding: 0.2cm;"><button onClick="showInventoryWindow();" class="game-button">Inventory</button></td>
+							</tr>
+							<tr>
+								<td align="right" style="padding: 0.2cm;"><button onClick="showNotebookWindow();" class="game-button">Notebook</button></td>
+								<td align="left" style="padding: 0.2cm;"><button onClick="showRecordsWindow();" class="game-button">Case File</button></td>
+							</tr>
+							<tr>
+								<td align="center" colspan="2" style="padding: 0.2cm;"><button onClick='downloadTextFile("savegame.txt", getSavegameFile());' class="game-button">Save Game</button></td>
+							</tr>
+							<tr>
+								<td align="center" colspan="2" style="padding: 0.2cm;"><img src="./img/radio.png" width="40%" onclick="showSoundControlsWindow();"></td>
+							</tr>
+						</table>
 					</center>
 				</td>
 			</tr>
@@ -181,6 +188,18 @@
 			<div align="right"><button onClick="hideObject();" class="game-button"> X </button></div>
 			<center>
 				<img id="object-image" style="max-width: 100%"/>
+			</center>
+		</div>
+	</div>
+	<div class="container-popup" id="sound-controls" hidden="true">
+		<div class="popup" style="height: 40%;">
+			<div align="right"><button onClick="hideSoundControlsWindow();" class="game-button"> X </button></div>
+			<center>
+				<b><span>Volume Control</span></b> <br>
+				<table>
+					<tr><td align="center"><button class='game-button' onClick='decreaseMusicVolume();'>-</button> <span>Music</span> <button class='game-button' onClick='increaseMusicVolume();'>+</button></td></tr>
+					<tr><td align="center"><button class='game-button' onClick='decreaseSoundfxVolume();'>-</button> <span>SoundFx</span> <button class='game-button' onClick='increaseSoundfxVolume();'>+</button></td></tr>
+				</table>
 			</center>
 		</div>
 	</div>

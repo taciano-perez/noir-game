@@ -24,15 +24,15 @@ A text-oriented game in JavaScript.
 - The game is inspired by hardboiled detective fiction, and follows the tropes of the genre.
 - Sentences are short and direct, and use present tense.
 - Slang is heavily used. See [reference1](https://www.miskatonic.org/slang.html), [reference2](http://www.classiccrimefiction.com/hardboiled-slang.htm), [reference3](https://atleb.tripod.com/ordbok/hardboiled_slang.htm).
-- Guns used in hardboiled fiction: (http://raymondchandlercrimeglossary.blogspot.com/p/the-guns-of-raymond-chandler.html)
 
 ### Reference material
 
-- https://thrillingdetective.com/2020/12/03/dangerous-dames/
+- Women protagonists in hardboiled fiction: (https://thrillingdetective.com/2020/12/03/dangerous-dames/)
+- Guns used in hardboiled fiction: (http://raymondchandlercrimeglossary.blogspot.com/p/the-guns-of-raymond-chandler.html)
 
 ### Story
 
-I will not detail the story in order to prevent spoilers. The below list helps me keep track of the major parts that need to be done.
+I will not detail the story in order to prevent spoilers. The below list helps me keep track of major parts that need to be done.
 
 - [ ] Chapter 1: The job
 - [ ] Chapter 2: City Park
@@ -42,13 +42,14 @@ I will not detail the story in order to prevent spoilers. The below list helps m
 
 ### Tech Debt
 - [ ] Automate testing
-- [ ] Music & sound controls
+- [X] Music & sound controls
 - [ ] Incorporate combat fully in the main narrative panel (so case file isn't messed up)
 - [ ] Make it possible to flee from combat
 - [X] Combat takes character stats into account
 - [ ] Handguns need reloading
 - [X] Implement Notebook functionality
 - [ ] Alert buttons when something changes (pulse?)
+- [ ] Binary JSON savegame
 
 ### Resources
 

@@ -374,11 +374,6 @@
                 "postcondition": "combat({playerAttacksFirst: true, playerWeapon: WEAPONS.BankersSpecial})"
             },
             {
-                "displayText" : "Flee.",
-                "targetCard": "start_thug1_combat",
-                "precondition": "game.currentEnemy.hitpoints > 0 && game.player.hitpoints > 0"
-            },
-            {
                 "displayText" : "Attempt to rise.",
                 "targetCard": "death",
                 "precondition": "game.player.hitpoints <= 0",
