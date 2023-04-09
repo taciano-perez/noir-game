@@ -1,7 +1,11 @@
 # Noir, a game
 A text-oriented game in JavaScript.
 
-## Starting the game
+In order to play the game online, go to https://taciano-perez.github.io/noir-game/.
+
+## Developing
+
+Clone the repository. Start the HTTP server (see below) and open a browser:
 
 ```
 > http_server
