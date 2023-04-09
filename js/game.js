@@ -348,7 +348,7 @@ function showMapWindow() {
 
     map_window.hidden = false;
 
-    playAudio("./audio/car-start.wav", SOUND_GAIN_MEDIUM);
+    playAudio("./audio/car-start.wav");
 }
 
 function hideMapWindow() {
@@ -562,16 +562,11 @@ async function fadeImageOut() {
     await fadeToBlack("image1");
 }
 
-const SOUND_GAIN_MAX = 1.0;
-const SOUND_GAIN_FULL = 0.5;
-const SOUND_GAIN_MEDIUM = 0.3;
-const SOUND_GAIN_LOW = 0.1;
-
 var audioCtx = new AudioContext();
 var musicGain;
 var soundfxGain;
 
-function playAudio(sourceName, gain) {
+function playAudio(sourceName) {
     if (DEBUG) return;  // skip audio in DEBUG mode
 
     const audio = new Audio(sourceName);
@@ -657,7 +652,7 @@ async function displayStory(sentences) {
             game.record += to_add;
         } else if (sentence.startsWith("play_sound: ")) {
             var splitCommand = sentence.split(/\s/);
-            playAudio(splitCommand[1], SOUND_GAIN_FULL);
+            playAudio(splitCommand[1]);
         } else if (sentence.startsWith("display_image: ")) {
             var splitCommand = sentence.split(/\s/);
             displayImage(splitCommand[1]);
@@ -761,10 +756,10 @@ function combat({ playerAttacksFirst = true, playerWeapon = WEAPONS.Fists} = {})
         const damage = damageRoll(game.player, game.currentEnemy, playerWeapon);
         if (playerWeapon === WEAPONS.Fists) {
             queueConsoleMessage("I punch " + game.currentEnemy.fullname() + " square in the chin.");
-            playAudio('./audio/punch-boxing.wav', SOUND_GAIN_FULL);
+            playAudio('./audio/punch-boxing.wav');
         } else {
             queueConsoleMessage("I aim true and squeeze the trigger of my " + game.player.weapon.name + ".");
-            playAudio('./audio/single-shot.wav', SOUND_GAIN_FULL);
+            playAudio('./audio/single-shot.wav');
         }
         queueConsoleMessage("I deal " + damage + " damage points to " + game.currentEnemy.fullname() + ".");
         queueConsoleMessage(game.currentEnemy.fullname() + " has now " + game.currentEnemy.hitpoints + " hitpoint(s) ("+ game.currentEnemy.healthPercentage()  + "% health).");
@@ -773,7 +768,7 @@ function combat({ playerAttacksFirst = true, playerWeapon = WEAPONS.Fists} = {})
             queueConsoleMessage("I unleash my fist in a vicious uppercut, but the bastard shuffles and dodges it.");
         } else {
             queueConsoleMessage("I pump metal with my " + game.player.weapon.name + ", but the recoil makes me miss the shot.");
-            playAudio('./audio/single-shot.wav', SOUND_GAIN_FULL);
+            playAudio('./audio/single-shot.wav');
         }
     }
     if (game.currentEnemy.hitpoints > 0) {  // dead enemies cause no damage
@@ -785,11 +780,11 @@ function combat({ playerAttacksFirst = true, playerWeapon = WEAPONS.Fists} = {})
             queueConsoleMessage("I have now " + game.player.hitpoints + " hitpoint(s) ("+ game.player.healthPercentage()  + "% health).");
         } else {
             queueConsoleMessage(game.currentEnemy.fullname() + " throws lead at me, but the palooka misses it.");
-            playAudio('./audio/bullet-flyby.wav', SOUND_GAIN_FULL);
+            playAudio('./audio/bullet-flyby.wav');
         }
     } else {
         queueConsoleMessage("You've sent " + game.currentEnemy.fullname() + " to the big sleep.");
-        playAudio('./audio/male-death.mp3', SOUND_GAIN_FULL);
+        playAudio('./audio/male-death.mp3');
     }
 
 }
